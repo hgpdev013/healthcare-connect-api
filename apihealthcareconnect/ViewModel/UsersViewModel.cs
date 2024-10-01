@@ -2,14 +2,20 @@
 {
     public class UsersViewModel
     {
-        public string cd_cpf { get; set; }
-        public string cd_identification { get; set; }
-        public DateTime dt_birth {  get; set; }
-        public string ds_cellphone { get; set; }
-        public string nm_user { get; set; }
-        public string ds_email { get; set; }
-        public string? ds_password { get; set; }
-        public string ds_login { get; set; }
-        public int cd_user_type { get; set; }
+        public int id { get; set; }
+        public string cpf { get; set; }
+        public string documentNumber { get; set; }
+        public string name { get; set; }
+        public DateTime dateOfBirth { get; set; }
+        public string email { get; set; }
+        public string cellphoneNumber { get; set; }
+        public string login { get; set; }
+        public int userTypeId { get; set; }
+        public string? streetName { get; set; }
+        public int? streetNumber { get; set; }
+        public string? complement { get; set; }
+        public string? neighborhood { get; set; }
+        public string? state { get; set; }
+        public string? cep { get; set; }
     }
 }
