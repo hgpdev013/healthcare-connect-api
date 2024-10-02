@@ -5,6 +5,7 @@ namespace apihealthcareconnect.Infraestrutura
 {
     public class ConnectionContext : DbContext
     {
+        public DbSet<UserType> UserTypes { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<Doctors> Doctors { get; set; }
         public DbSet<SpecialtyType> SpecialtyType { get; set; }

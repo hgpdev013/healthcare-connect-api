@@ -23,6 +23,7 @@ namespace apihealthcareconnect.Models
         public string? nm_state { get; set; }
         public string? cd_cep { get; set; }
         public string? ds_password { get; set; }
+        public UserType? userType { get; set; }
 
 
 
