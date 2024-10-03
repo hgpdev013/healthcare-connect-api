@@ -15,7 +15,7 @@ namespace apihealthcareconnect.MapperProfiles
            .ForMember(dest => dest.documentNumber, opt => opt.MapFrom(src => src.cd_identification))
            .ForMember(dest => dest.dateOfBirth, opt => opt.MapFrom(src => src.dt_birth))
            .ForMember(dest => dest.email, opt => opt.MapFrom(src => src.ds_email))
-           .ForMember(dest => dest.cellphoneNumber, opt => opt.MapFrom(src => src.ds_cellphone))
+           .ForMember(dest => dest.cellphone, opt => opt.MapFrom(src => src.ds_cellphone))
            .ForMember(dest => dest.login, opt => opt.MapFrom(src => src.ds_login))
            .ForMember(dest => dest.userTypeId, opt => opt.MapFrom(src => src.cd_user_type))
            .ForMember(dest => dest.streetName, opt => opt.MapFrom(src => src.nm_street))
@@ -23,7 +23,9 @@ namespace apihealthcareconnect.MapperProfiles
            .ForMember(dest => dest.complement, opt => opt.MapFrom(src => src.ds_complement))
            .ForMember(dest => dest.neighborhood, opt => opt.MapFrom(src => src.ds_neighborhood))
            .ForMember(dest => dest.state, opt => opt.MapFrom(src => src.nm_state))
-           .ForMember(dest => dest.cep, opt => opt.MapFrom(src => src.cd_cep));
+           .ForMember(dest => dest.cep, opt => opt.MapFrom(src => src.cd_cep))
+           .ForMember(dest => dest.userType, opt => opt.MapFrom(src => src.userType))
+           .ForMember(dest => dest.doctorData, opt => opt.MapFrom(src => src.doctors));
         }
     }
 }

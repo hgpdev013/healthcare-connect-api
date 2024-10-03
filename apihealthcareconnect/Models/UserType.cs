@@ -9,7 +9,7 @@ namespace apihealthcareconnect.Models
         [Key]
         public int? cd_user_type { get; set; }
         public string ds_user_type { get; set; }
-        public ICollection<Users>? Users { get; set; } = new List<Users>();
+        public ICollection<Users>? Users { get; set; }
 
         public UserType(int? cd_user_type, string ds_user_type)
         {

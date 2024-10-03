@@ -1,4 +1,6 @@
-﻿namespace apihealthcareconnect.ViewModel
+﻿using apihealthcareconnect.Models;
+
+namespace apihealthcareconnect.ViewModel
 {
     public class UsersViewModel
     {
@@ -8,7 +10,7 @@
         public string name { get; set; }
         public DateTime dateOfBirth { get; set; }
         public string email { get; set; }
-        public string cellphoneNumber { get; set; }
+        public string cellphone { get; set; }
         public string login { get; set; }
         public int userTypeId { get; set; }
         public string? streetName { get; set; }
@@ -17,5 +19,7 @@
         public string? neighborhood { get; set; }
         public string? state { get; set; }
         public string? cep { get; set; }
+        public UserTypeViewModel userType { get; set; } = new UserTypeViewModel();
+        public DoctorsViewModel? doctorData { get; set; } = null;
     }
 }
