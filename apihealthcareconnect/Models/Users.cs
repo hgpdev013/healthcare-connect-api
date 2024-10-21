@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace apihealthcareconnect.Models
 {
@@ -7,28 +8,49 @@ namespace apihealthcareconnect.Models
     public class Users
     {
         [Key]
-        public int cd_user { get; set; }
+        [JsonPropertyName("id")]
+        public int? cd_user { get; set; }
+        [JsonPropertyName("cpf")]
         public string cd_cpf { get; set; }
+        [JsonPropertyName("documentNumber")]
         public string cd_identification { get; set; }
+        [JsonPropertyName("name")]
         public string nm_user { get; set; }
+        [JsonPropertyName("dateOfBirth")]
         public DateTime dt_birth { get; set; }
+        [JsonPropertyName("email")]
         public string ds_email { get; set; }
+        [JsonPropertyName("cellphone")]
         public string ds_cellphone { get; set; }
+        [JsonPropertyName("login")]
         public string ds_login { get; set; }
+        [JsonPropertyName("streetName")]
         public string? nm_street { get; set; }
+        [JsonPropertyName("streetNumber")]
         public int? cd_street_number { get; set; }
+        [JsonPropertyName("complement")]
         public string? ds_complement { get; set; }
+        [JsonPropertyName("neighborhood")]
         public string? ds_neighborhood { get; set; }
+        [JsonPropertyName("stateName")]
         public string? nm_state { get; set; }
+        [JsonPropertyName("cep")]
         public string? cd_cep { get; set; }
+        [JsonPropertyName("city")]
         public string? nm_city {  get; set; }
+        [JsonPropertyName("gender")]
         public string? ds_gender {  get; set; }
+        [JsonPropertyName("isActive")]
         public bool? is_active { get; set; }
+        [JsonIgnore]
         public string? ds_password { get; set; }
+        [JsonPropertyName("userTypeId")]
         public int cd_user_type { get; set; }
-        public Users(string cd_cpf, string cd_identification, string nm_user, DateTime dt_birth, string ds_email, string ds_cellphone, string ds_login, int cd_user_type, string? nm_street,
+        public Doctors? doctorData { get; set; }
+        public Users(int? cd_user, string cd_cpf, string cd_identification, string nm_user, DateTime dt_birth, string ds_email, string ds_cellphone, string ds_login, int cd_user_type, string? nm_street,
             int? cd_street_number, string? ds_complement, string? nm_state, string? cd_cep, string? nm_city, string? ds_gender, bool? is_active, string? ds_password)
         {
+            this.cd_user = cd_user;
             this.cd_cpf = cd_cpf;
             this.cd_identification = cd_identification;
             this.nm_user = nm_user;

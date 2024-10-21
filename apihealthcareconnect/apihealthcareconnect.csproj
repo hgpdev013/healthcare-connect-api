@@ -7,15 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MapperProfiles\**" />
     <Compile Remove="NovaPasta1\**" />
     <Compile Remove="NovaPasta\**" />
     <Compile Remove="Repositories\NovaPasta\**" />
+    <Content Remove="MapperProfiles\**" />
     <Content Remove="NovaPasta1\**" />
     <Content Remove="NovaPasta\**" />
     <Content Remove="Repositories\NovaPasta\**" />
+    <EmbeddedResource Remove="MapperProfiles\**" />
     <EmbeddedResource Remove="NovaPasta1\**" />
     <EmbeddedResource Remove="NovaPasta\**" />
     <EmbeddedResource Remove="Repositories\NovaPasta\**" />
+    <None Remove="MapperProfiles\**" />
     <None Remove="NovaPasta1\**" />
     <None Remove="NovaPasta\**" />
     <None Remove="Repositories\NovaPasta\**" />
@@ -34,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.29">
       <PrivateAssets>all</PrivateAssets>

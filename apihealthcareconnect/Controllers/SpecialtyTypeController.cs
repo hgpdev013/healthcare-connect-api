@@ -1,7 +1,6 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
 using apihealthcareconnect.ViewModel;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apihealthcareconnect.Controllers
@@ -11,27 +10,36 @@ namespace apihealthcareconnect.Controllers
     public class SpecialtyTypeController : ControllerBase
     {
         private readonly ISpecialtyTypeRepository _specialtyTypeRepository;
-        private readonly IMapper _mapper;
 
-        public SpecialtyTypeController(ISpecialtyTypeRepository specialtyTypeRepository, IMapper mapper)
+        public SpecialtyTypeController(ISpecialtyTypeRepository specialtyTypeRepository)
         {
             _specialtyTypeRepository = specialtyTypeRepository ?? throw new ArgumentNullException();
-            _mapper = mapper;
         }
 
         
         [HttpGet]
-        [ProducesResponseType(typeof(List<SpecialtyTypeViewModel>), 200)]
-        public IActionResult GetSpecialties()
+        [ProducesResponseType(typeof(List<SpecialtyType>), 200)]
+        public async Task<IActionResult> GetSpecialties()
         {
-            var specialties = _specialtyTypeRepository.GetAll().OrderBy(s => s.ds_specialty_type).ToList();
-            var specialtiesViewModel = _mapper.Map<List<SpecialtyTypeViewModel>>(specialties);
-            return Ok(specialtiesViewModel);
+            var specialties = await _specialtyTypeRepository.GetAll();
+            return Ok(specialties);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(SpecialtyType), 200)]
+        public async Task<IActionResult> GetSpecialtyById(int id)
+        {
+            var specialtyById = await _specialtyTypeRepository.GetById(id);
+            if (specialtyById == null)
+            {
+                return NotFound("Especialidade não encontrada");
+            }
+            return Ok(specialtyById);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(SpecialtyTypeViewModel), 201)]
-        public IActionResult PostSpecialties(SpecialtyTypeViewModel specialtyTypeViewModel)
+        [ProducesResponseType(typeof(SpecialtyType), 201)]
+        public async Task<IActionResult> PostSpecialties(SpecialtyTypeViewModel specialtyTypeParams)
         {
             if (!ModelState.IsValid)
             {
@@ -39,30 +47,36 @@ namespace apihealthcareconnect.Controllers
             }
 
             var specialty = new SpecialtyType(null,
-                specialtyTypeViewModel.description,
-                specialtyTypeViewModel.intervalBetweenAppointments,
-                specialtyTypeViewModel.isActive);
-            _specialtyTypeRepository.Add(specialty);
-            specialtyTypeViewModel = _mapper.Map<SpecialtyTypeViewModel>(specialty);
-            return Ok(specialtyTypeViewModel);
+                specialtyTypeParams.description,
+                specialtyTypeParams.intervalBetweenAppointments,
+                specialtyTypeParams.isActive);
+            var createdSpecialty = await _specialtyTypeRepository.Add(specialty);
+            return Ok(createdSpecialty);
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(SpecialtyTypeViewModel), 200)]
-        public IActionResult PutSpecialties(SpecialtyTypeViewModel specialtyTypeViewModel)
+        [ProducesResponseType(typeof(SpecialtyType), 200)]
+        public async Task<IActionResult> PutSpecialties(SpecialtyTypeViewModel specialtyTypeParams)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var updatedSpecialty = new SpecialtyType(specialtyTypeViewModel.id,
-                specialtyTypeViewModel.description,
-                specialtyTypeViewModel.intervalBetweenAppointments,
-                specialtyTypeViewModel.isActive);
-            _specialtyTypeRepository.Update(updatedSpecialty);
-            specialtyTypeViewModel = _mapper.Map<SpecialtyTypeViewModel>(updatedSpecialty);
-            return Ok(specialtyTypeViewModel);
+            var specialtyToUpdate = await _specialtyTypeRepository.GetById(specialtyTypeParams.id);
+
+            if(specialtyToUpdate == null)
+            {
+                return NotFound("Especialidade não encontrada");
+            }
+
+            specialtyToUpdate.cd_specialty_type = specialtyTypeParams.id;
+            specialtyToUpdate.ds_specialty_type = specialtyTypeParams.description;
+            specialtyToUpdate.dt_interval_between_appointments = specialtyTypeParams.intervalBetweenAppointments;
+            specialtyToUpdate.is_active = specialtyTypeParams.isActive;
+
+            var updatedSpecialty = await _specialtyTypeRepository.Update(specialtyToUpdate);
+            return Ok(updatedSpecialty);
         }
     }
 }

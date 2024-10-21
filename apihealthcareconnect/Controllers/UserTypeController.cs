@@ -1,7 +1,6 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
 using apihealthcareconnect.ViewModel;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apihealthcareconnect.Controllers
@@ -11,12 +10,10 @@ namespace apihealthcareconnect.Controllers
     public class UserTypeController : ControllerBase
     {
         private readonly IUserTypeRepository _userTypeRepository;
-        private readonly IMapper _mapper;
 
-        public UserTypeController(IUserTypeRepository userTypeRepository, IMapper mapper)
+        public UserTypeController(IUserTypeRepository userTypeRepository)
         {
             _userTypeRepository = userTypeRepository ?? throw new ArgumentNullException();
-            _mapper = mapper;
         }
 
 
@@ -25,8 +22,7 @@ namespace apihealthcareconnect.Controllers
         public IActionResult GetUserTypes()
         {
             var userTypes = _userTypeRepository.GetAll().OrderBy(s => s.ds_user_type).ToList();
-            var userTypesViewModel = _mapper.Map<List<UserTypeViewModel>>(userTypes);
-            return Ok(userTypesViewModel);
+            return Ok(userTypes);
         }
 
         [HttpPost]
@@ -40,8 +36,7 @@ namespace apihealthcareconnect.Controllers
 
             var userType = new UserType(null, userTypeViewModel.name, userTypeViewModel.isActive);
             _userTypeRepository.Add(userType);
-            var userTypeFormatted = _mapper.Map<UserTypeViewModel>(userType);
-            return Ok(userTypeFormatted);
+            return Ok(userType);
         }
 
         [HttpPut]
@@ -55,8 +50,7 @@ namespace apihealthcareconnect.Controllers
 
             var updatedUserType = new UserType(userTypeViewModel.id, userTypeViewModel.name, userTypeViewModel.isActive);
             _userTypeRepository.Update(updatedUserType);
-            var userTypeFormatted = _mapper.Map<UserTypeViewModel>(updatedUserType);
-            return Ok(userTypeFormatted);
+            return Ok(updatedUserType);
         }
     }
 }

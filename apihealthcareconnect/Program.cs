@@ -1,7 +1,6 @@
 using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Repositories;
 using apihealthcareconnect.ViewModel;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -23,11 +22,10 @@ namespace apihealthcareconnect
                     });
             });
             builder.Services.AddControllers();
-            builder.Services.AddTransient<IUserTypeRepository, UserTypeRepository>();
-            builder.Services.AddTransient<IUsersRepository, UsersRepository>();
-            builder.Services.AddTransient<ISpecialtyTypeRepository, SpecialtyTypeRepository>();
-
-            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            builder.Services.AddScoped<IUserTypeRepository, UserTypeRepository>();
+            builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+            builder.Services.AddScoped<ISpecialtyTypeRepository, SpecialtyTypeRepository>();
 
             //builder.Services.AddTransient<>
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

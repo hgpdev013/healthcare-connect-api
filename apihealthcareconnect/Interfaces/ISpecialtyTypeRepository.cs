@@ -4,10 +4,12 @@ namespace apihealthcareconnect.Interfaces
 {
     public interface ISpecialtyTypeRepository
     {
-        List<SpecialtyType> GetAll();
+        Task<List<SpecialtyType>> GetAll();
 
-        void Add(SpecialtyType specialtyType);
+        Task<SpecialtyType> GetById(int id);
 
-        void Update(SpecialtyType specialtyType);
+        Task<SpecialtyType> Add(SpecialtyType specialtyType);
+
+        Task<SpecialtyType> Update(SpecialtyType specialtyType);
     }
 }

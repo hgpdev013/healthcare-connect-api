@@ -1,26 +1,34 @@
 ﻿using apihealthcareconnect.Infraestrutura;
 using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace apihealthcareconnect.Repositories
 {
     public class SpecialtyTypeRepository : ISpecialtyTypeRepository
     {
         private readonly ConnectionContext _context = new ConnectionContext();
-        public List<SpecialtyType> GetAll()
+        public async Task<List<SpecialtyType>> GetAll()
         {
-            return _context.SpecialtyType.ToList();
+            return await _context.SpecialtyType.OrderBy(s => s.ds_specialty_type).ToListAsync();
         }
 
-        public void Add(SpecialtyType specialtyType)
+        public async Task<SpecialtyType> GetById(int id)
         {
-            _context.Add(specialtyType);
-            _context.SaveChanges();
+            return await _context.SpecialtyType.FirstOrDefaultAsync(x => x.cd_specialty_type == id);
         }
-        public void Update(SpecialtyType specialtyType)
+
+        public async Task<SpecialtyType> Add(SpecialtyType specialtyType)
         {
-            _context.Update(specialtyType);
-            _context.SaveChanges();
+            var specialtyCreated = await _context.AddAsync(specialtyType);
+            await _context.SaveChangesAsync();
+            return specialtyCreated.Entity;
+        }
+        public async Task<SpecialtyType> Update(SpecialtyType specialtyType)
+        {
+            var specialtyUpdated = _context.Update(specialtyType);
+            await _context.SaveChangesAsync();
+            return specialtyUpdated.Entity;
         }
     }
 }

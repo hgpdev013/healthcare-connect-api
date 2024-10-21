@@ -9,32 +9,28 @@ namespace apihealthcareconnect.Repositories
     {
         private readonly ConnectionContext _context = new ConnectionContext();
 
-        public void Add(Users users)
+        public async Task<Users> Add(Users users)
         {
-            _context.Add(users);
-            _context.SaveChanges();
+            var userCreated = await _context.AddAsync(users);
+            await _context.SaveChangesAsync();
+            return userCreated.Entity;
         }
 
-        public void Update(Users users)
+        public async Task<Users> Update(Users users)
         {
-            _context.Update(users);
-            _context.SaveChanges();
+            var updatedUser = _context.Update(users);
+            await _context.SaveChangesAsync();
+            return updatedUser.Entity;
         }
 
-        public List<Users> GetAll()
+        public async Task<List<Users>> GetAll()
         {
-            return _context.Users
-            .ToList();
+            return await _context.Users.OrderBy(x => x.nm_user).ToListAsync();
         }
 
-        public Users GetById(int id)
+        public async Task<Users> GetById(int id)
         {
-            return _context.Users.FirstOrDefault(x => x.cd_user == id);
-        }
-
-        public List<Users> GetByUserTypeId(int userTypeId)
-        {
-            return _context.Users.Where(u => u.cd_user_type == userTypeId).ToList();
+            return await _context.Users.FirstOrDefaultAsync(x => x.cd_user == id);
         }
     }
 }

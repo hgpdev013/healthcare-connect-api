@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace apihealthcareconnect.Models
 {
@@ -7,9 +8,13 @@ namespace apihealthcareconnect.Models
     public class SpecialtyType
     {
         [Key]
+        [JsonPropertyName("id")]
         public int? cd_specialty_type { get; set; }
+        [JsonPropertyName("specialtyName")]
         public string ds_specialty_type { get; set; }
+        [JsonPropertyName("intervalBetweenAppointments")]
         public string dt_interval_between_appointments { get; set; }
+        [JsonPropertyName("isActive")]
         public bool is_active { get; set; }
 
         public SpecialtyType(int? cd_specialty_type, string ds_specialty_type, string dt_interval_between_appointments, bool is_active) {
