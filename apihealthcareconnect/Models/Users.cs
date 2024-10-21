@@ -21,18 +21,13 @@ namespace apihealthcareconnect.Models
         public string? ds_neighborhood { get; set; }
         public string? nm_state { get; set; }
         public string? cd_cep { get; set; }
+        public string? nm_city {  get; set; }
+        public string? ds_gender {  get; set; }
+        public bool? is_active { get; set; }
         public string? ds_password { get; set; }
-        [ForeignKey("UserType")]
         public int cd_user_type { get; set; }
-        public ICollection<UserType>? userType { get; set; }
-        [ForeignKey("Doctors")]
-        public ICollection<Doctors>? doctors { get; set; }
-
-
-
-
         public Users(string cd_cpf, string cd_identification, string nm_user, DateTime dt_birth, string ds_email, string ds_cellphone, string ds_login, int cd_user_type, string? nm_street,
-            int? cd_street_number, string? ds_complement, string? nm_state, string? cd_cep, string? ds_password)
+            int? cd_street_number, string? ds_complement, string? nm_state, string? cd_cep, string? nm_city, string? ds_gender, bool? is_active, string? ds_password)
         {
             this.cd_cpf = cd_cpf;
             this.cd_identification = cd_identification;
@@ -47,8 +42,10 @@ namespace apihealthcareconnect.Models
             this.ds_complement = ds_complement;
             this.nm_state = nm_state;
             this.cd_cep = cd_cep;
+            this.nm_city = nm_city;
+            this.ds_gender = ds_gender;
+            this.is_active = is_active;
             this.ds_password = ds_password;
-
         }
     }
 }

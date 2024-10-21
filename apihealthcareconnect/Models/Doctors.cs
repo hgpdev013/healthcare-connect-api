@@ -12,10 +12,6 @@ namespace apihealthcareconnect.Models
         public string? ds_observation { get; set; }
         public int? cd_user { get; set; }
         public int? cd_specialty_type { get; set; }
-        [ForeignKey("SpecialtyType")]
-        public SpecialtyType specialtyType { get; set; }
-
-        public ICollection<Users>? Users { get; set; }
 
         public Doctors(int? cd_doctor, string? cd_crm, string? ds_observation, int? cd_user, int? cd_specialty_type)
         {

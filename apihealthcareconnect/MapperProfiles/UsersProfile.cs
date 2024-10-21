@@ -24,8 +24,9 @@ namespace apihealthcareconnect.MapperProfiles
            .ForMember(dest => dest.neighborhood, opt => opt.MapFrom(src => src.ds_neighborhood))
            .ForMember(dest => dest.state, opt => opt.MapFrom(src => src.nm_state))
            .ForMember(dest => dest.cep, opt => opt.MapFrom(src => src.cd_cep))
-           .ForMember(dest => dest.userType, opt => opt.MapFrom(src => src.userType))
-           .ForMember(dest => dest.doctorData, opt => opt.MapFrom(src => src.doctors));
+           .ForMember(dest => dest.city, opt => opt.MapFrom(src => src.nm_city))
+           .ForMember(dest => dest.gender, opt => opt.MapFrom(src => src.ds_gender))
+           .ForMember(dest => dest.isActive, opt => opt.MapFrom(src => src.is_active));
         }
     }
 }

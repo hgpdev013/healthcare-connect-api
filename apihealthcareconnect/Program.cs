@@ -25,7 +25,6 @@ namespace apihealthcareconnect
             builder.Services.AddControllers();
             builder.Services.AddTransient<IUserTypeRepository, UserTypeRepository>();
             builder.Services.AddTransient<IUsersRepository, UsersRepository>();
-            builder.Services.AddTransient<IDoctorsRepository, DoctorsRepository>();
             builder.Services.AddTransient<ISpecialtyTypeRepository, SpecialtyTypeRepository>();
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());

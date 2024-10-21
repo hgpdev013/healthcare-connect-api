@@ -38,7 +38,7 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userType = new UserType(null, userTypeViewModel.name);
+            var userType = new UserType(null, userTypeViewModel.name, userTypeViewModel.isActive);
             _userTypeRepository.Add(userType);
             var userTypeFormatted = _mapper.Map<UserTypeViewModel>(userType);
             return Ok(userTypeFormatted);
@@ -53,7 +53,7 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            var updatedUserType = new UserType(userTypeViewModel.id, userTypeViewModel.name);
+            var updatedUserType = new UserType(userTypeViewModel.id, userTypeViewModel.name, userTypeViewModel.isActive);
             _userTypeRepository.Update(updatedUserType);
             var userTypeFormatted = _mapper.Map<UserTypeViewModel>(updatedUserType);
             return Ok(userTypeFormatted);

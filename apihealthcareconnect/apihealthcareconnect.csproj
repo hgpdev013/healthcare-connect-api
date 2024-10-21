@@ -22,6 +22,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\DoctorsController.cs" />
+    <Compile Remove="Interfaces\IDoctorsRepository.cs" />
+    <Compile Remove="Models\Allergies.cs" />
+    <Compile Remove="Models\Appointments.cs" />
+    <Compile Remove="Models\AppointmentsReturn.cs" />
+    <Compile Remove="Models\Exams.cs" />
+    <Compile Remove="Models\ExamType.cs" />
+    <Compile Remove="Models\Pacients.cs" />
+    <Compile Remove="Repositories\DoctorsRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.29">

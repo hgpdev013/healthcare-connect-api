@@ -38,7 +38,10 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            var specialty = new SpecialtyType(null, specialtyTypeViewModel.description, specialtyTypeViewModel.intervalBetweenAppointments);
+            var specialty = new SpecialtyType(null,
+                specialtyTypeViewModel.description,
+                specialtyTypeViewModel.intervalBetweenAppointments,
+                specialtyTypeViewModel.isActive);
             _specialtyTypeRepository.Add(specialty);
             specialtyTypeViewModel = _mapper.Map<SpecialtyTypeViewModel>(specialty);
             return Ok(specialtyTypeViewModel);
@@ -53,7 +56,10 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            var updatedSpecialty = new SpecialtyType(specialtyTypeViewModel.id, specialtyTypeViewModel.description, specialtyTypeViewModel.intervalBetweenAppointments);
+            var updatedSpecialty = new SpecialtyType(specialtyTypeViewModel.id,
+                specialtyTypeViewModel.description,
+                specialtyTypeViewModel.intervalBetweenAppointments,
+                specialtyTypeViewModel.isActive);
             _specialtyTypeRepository.Update(updatedSpecialty);
             specialtyTypeViewModel = _mapper.Map<SpecialtyTypeViewModel>(updatedSpecialty);
             return Ok(specialtyTypeViewModel);

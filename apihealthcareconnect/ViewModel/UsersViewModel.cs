@@ -19,7 +19,8 @@ namespace apihealthcareconnect.ViewModel
         public string? neighborhood { get; set; }
         public string? state { get; set; }
         public string? cep { get; set; }
-        public UserTypeViewModel userType { get; set; } = new UserTypeViewModel();
-        public DoctorsViewModel? doctorData { get; set; } = null;
+        public string? city { get; set; }
+        public string? gender { get; set; }
+        public bool? isActive { get; set; }
     }
 }

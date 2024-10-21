@@ -9,6 +9,5 @@ namespace apihealthcareconnect.ViewModel
         public string? observation { get; set; }
         public int userId { get; set; }
         public int specialtyTypeId { get; set; }
-        public SpecialtyTypeViewModel specialty { get; set; } = new SpecialtyTypeViewModel();
     }
 }
