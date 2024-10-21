@@ -4,12 +4,12 @@ namespace apihealthcareconnect.Interfaces
 {
     public interface IUserTypeRepository
     {
-        void Add(UserType userType);
+        Task<UserType> Add(UserType userType);
 
-        List<UserType> GetAll();
+        Task<List<UserType>> GetAll();
 
-        UserType GetById(int id);
+        Task<UserType> GetById(int id);
 
-        void Update(UserType userType);
+        Task<UserType> Update(UserType userType);
     }
 }

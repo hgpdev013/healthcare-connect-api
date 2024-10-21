@@ -28,7 +28,7 @@ namespace apihealthcareconnect.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostSpecialties(UsersDoctorsRequestViewModel UserDoctorsParams)
+        public async Task<IActionResult> PostDoctors(UsersDoctorsRequestViewModel UserDoctorsParams)
         {
             if (!ModelState.IsValid)
             {

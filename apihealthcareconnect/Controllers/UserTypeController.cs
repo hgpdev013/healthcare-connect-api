@@ -1,5 +1,6 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
+using apihealthcareconnect.Repositories;
 using apihealthcareconnect.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,16 +19,28 @@ namespace apihealthcareconnect.Controllers
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<UserTypeViewModel>), 200)]
-        public IActionResult GetUserTypes()
+        [ProducesResponseType(typeof(List<UserType>), 200)]
+        public async Task<IActionResult> GetUserTypes()
         {
-            var userTypes = _userTypeRepository.GetAll().OrderBy(s => s.ds_user_type).ToList();
+            var userTypes = await _userTypeRepository.GetAll();
             return Ok(userTypes);
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(UserType), 200)]
+        public async Task<IActionResult> GetSpecialtyById(int id)
+        {
+            var userTypeById = await _userTypeRepository.GetById(id);
+            if (userTypeById == null)
+            {
+                return NotFound("Tipo de usuário não encontrado");
+            }
+            return Ok(userTypeById);
+        }
+
         [HttpPost]
-        [ProducesResponseType(typeof(UserTypeViewModel), 201)]
-        public IActionResult PostSpecialties(UserTypeViewModel userTypeViewModel)
+        [ProducesResponseType(typeof(UserType), 201)]
+        public async Task<IActionResult> PostUserType(UserTypeViewModel userTypeViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -35,21 +48,30 @@ namespace apihealthcareconnect.Controllers
             }
 
             var userType = new UserType(null, userTypeViewModel.name, userTypeViewModel.isActive);
-            _userTypeRepository.Add(userType);
-            return Ok(userType);
+            var createdUserType = await _userTypeRepository.Add(userType);
+            return Ok(createdUserType);
         }
 
         [HttpPut]
         [ProducesResponseType(typeof(UserTypeViewModel), 200)]
-        public IActionResult PutSpecialties(UserTypeViewModel userTypeViewModel)
+        public async Task<IActionResult> PutUserType(UserTypeViewModel userTypeViewModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var updatedUserType = new UserType(userTypeViewModel.id, userTypeViewModel.name, userTypeViewModel.isActive);
-            _userTypeRepository.Update(updatedUserType);
+            var userTypeToUpdate = await _userTypeRepository.GetById(userTypeViewModel.id);
+            if (userTypeToUpdate == null)
+            {
+                return NotFound("Tipo de usuário a ser atualizado não existe na base de dados.");
+            }
+
+            userTypeToUpdate.cd_user_type = userTypeViewModel.id;
+            userTypeToUpdate.ds_user_type = userTypeViewModel.name;
+            userTypeToUpdate.is_active = userTypeViewModel.isActive;
+            
+            var updatedUserType = await _userTypeRepository.Update(userTypeToUpdate);
             return Ok(updatedUserType);
         }
     }

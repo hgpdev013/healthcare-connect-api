@@ -8,8 +8,11 @@ namespace apihealthcareconnect.Models
     public class UserType
     {
         [Key]
+        [JsonPropertyName("id")]
         public int? cd_user_type { get; set; }
+        [JsonPropertyName("name")]
         public string ds_user_type { get; set; }
+        [JsonPropertyName("isActive")]
         public bool is_active { get; set; }
 
         public UserType(int? cd_user_type, string ds_user_type, bool is_active)

@@ -1,33 +1,36 @@
 ﻿using apihealthcareconnect.Infraestrutura;
 using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace apihealthcareconnect.Repositories
 {
     public class UserTypeRepository : IUserTypeRepository
     {
         private readonly ConnectionContext _context = new ConnectionContext();
-
-        public void Add(UserType userType)
+        public async Task<List<UserType>> GetAll()
         {
-            _context.Add(userType);
-            _context.SaveChanges();
+            return await _context.UserTypes.OrderBy(s => s.ds_user_type).ToListAsync();
         }
 
-        public void Update(UserType userType)
+        public async Task<UserType> GetById(int id)
         {
-            _context.Update(userType);
-            _context.SaveChanges();
+            return await _context.UserTypes.FirstOrDefaultAsync(x => x.cd_user_type == id);
         }
 
-        public List<UserType> GetAll()
+        public async Task<UserType> Add(UserType userType)
         {
-            return _context.UserTypes.ToList();
+            var createdUserType = await _context.AddAsync(userType);
+            await _context.SaveChangesAsync();
+
+            return createdUserType.Entity;
         }
 
-        public UserType GetById(int id)
+        public async Task<UserType> Update(UserType userType)
         {
-            return _context.UserTypes.FirstOrDefault(x => x.cd_user_type == id);
+            var updatedUserType = _context.Update(userType);
+            await _context.SaveChangesAsync();
+            return updatedUserType.Entity;
         }
     }
 }
