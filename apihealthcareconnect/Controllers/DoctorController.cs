@@ -59,6 +59,7 @@ namespace apihealthcareconnect.Controllers
                 UserDoctorsParams.cep,
                 UserDoctorsParams.city,
                 UserDoctorsParams.gender,
+                UserDoctorsParams.neighborhood,
                 UserDoctorsParams.isActive,
                 null);
 
@@ -114,6 +115,7 @@ namespace apihealthcareconnect.Controllers
             userToBeEdited.cd_cep = UserDoctorsParams.cep;
             userToBeEdited.nm_city = UserDoctorsParams.city;
             userToBeEdited.ds_gender = UserDoctorsParams.gender;
+            userToBeEdited.ds_neighborhood = UserDoctorsParams.neighborhood;
             userToBeEdited.is_active = UserDoctorsParams.isActive;
 
             var editedUser = await _usersRepository.Update(userToBeEdited);
