@@ -27,6 +27,14 @@ namespace apihealthcareconnect.Controllers
             return Ok(doctors);
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Users), 200)]
+        public async Task<IActionResult> GetDoctorById(int id)
+        {
+            var doctor = await _doctorRepository.GetById(id);
+            return Ok(doctor);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostDoctors(UsersDoctorsRequestViewModel UserDoctorsParams)
         {
@@ -73,6 +81,50 @@ namespace apihealthcareconnect.Controllers
             }
 
             return Ok(new { user, doctorData = doctor });
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutDoctors(UsersDoctorsRequestViewModel UserDoctorsParams)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userToBeEdited = await _doctorRepository.GetById(UserDoctorsParams.id!.Value);
+
+            if (userToBeEdited == null)
+            {
+                return BadRequest("Usuário não encontrado");
+            }
+
+            userToBeEdited.cd_user = UserDoctorsParams.id;
+            userToBeEdited.cd_cpf = UserDoctorsParams.cpf;
+            userToBeEdited.cd_identification = UserDoctorsParams.documentNumber;
+            userToBeEdited.nm_user = UserDoctorsParams.name;
+            userToBeEdited.dt_birth = UserDoctorsParams.dateOfBirth;
+            userToBeEdited.ds_email = UserDoctorsParams.email;
+            userToBeEdited.ds_cellphone = UserDoctorsParams.cellphone;
+            userToBeEdited.ds_login = UserDoctorsParams.email;
+            userToBeEdited.cd_user_type = UserDoctorsParams.userTypeId;
+            userToBeEdited.nm_street = UserDoctorsParams.streetName;
+            userToBeEdited.cd_street_number = UserDoctorsParams.streetNumber;
+            userToBeEdited.ds_complement = UserDoctorsParams.complement;
+            userToBeEdited.nm_state = UserDoctorsParams.state;
+            userToBeEdited.cd_cep = UserDoctorsParams.cep;
+            userToBeEdited.nm_city = UserDoctorsParams.city;
+            userToBeEdited.ds_gender = UserDoctorsParams.gender;
+            userToBeEdited.is_active = UserDoctorsParams.isActive;
+
+            var editedUser = await _usersRepository.Update(userToBeEdited);
+
+            userToBeEdited.doctorData.cd_crm = UserDoctorsParams.doctorData.crm;
+            userToBeEdited.doctorData.cd_specialty_type = UserDoctorsParams.doctorData.specialtyTypeId;
+            userToBeEdited.doctorData.cd_user = UserDoctorsParams.id;
+
+            var editedDoctor = await _doctorRepository.Update(userToBeEdited.doctorData);
+
+            return Ok(new { user = editedUser, doctorData = editedDoctor });
         }
     }
 }
