@@ -12,6 +12,7 @@ namespace apihealthcareconnect.Models
         public int cd_doctor {  get; set; }
         [JsonPropertyName("crm")]
         public string? cd_crm { get; set; }
+        [JsonIgnore]
         [JsonPropertyName("userId")]
         public int? cd_user { get; set; }
         [JsonIgnore]
