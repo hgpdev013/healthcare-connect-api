@@ -72,7 +72,8 @@ namespace apihealthcareconnect.Controllers
 
             var doctorToCreate = new Doctors(UserDoctorsParams.doctorData.crm,
                 user.cd_user,
-                UserDoctorsParams.doctorData.specialtyTypeId);
+                UserDoctorsParams.doctorData.specialtyTypeId,
+                UserDoctorsParams.doctorData.observation);
 
             var doctor = await _doctorRepository.Add(doctorToCreate);
 
@@ -96,7 +97,7 @@ namespace apihealthcareconnect.Controllers
 
             if (userToBeEdited == null)
             {
-                return BadRequest("Usuário não encontrado");
+                return NotFound("Usuário não encontrado");
             }
 
             userToBeEdited.cd_user = UserDoctorsParams.id;
@@ -123,6 +124,7 @@ namespace apihealthcareconnect.Controllers
             userToBeEdited.doctorData.cd_crm = UserDoctorsParams.doctorData.crm;
             userToBeEdited.doctorData.cd_specialty_type = UserDoctorsParams.doctorData.specialtyTypeId;
             userToBeEdited.doctorData.cd_user = UserDoctorsParams.id;
+            userToBeEdited.doctorData.ds_observation = UserDoctorsParams.doctorData.observation;
 
             var editedDoctor = await _doctorRepository.Update(userToBeEdited.doctorData);
 

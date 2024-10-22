@@ -10,24 +10,33 @@ namespace apihealthcareconnect.Models
         [Key]
         [JsonIgnore]
         public int cd_doctor {  get; set; }
+
         [JsonPropertyName("crm")]
         public string? cd_crm { get; set; }
+
         [JsonIgnore]
         [JsonPropertyName("userId")]
         public int? cd_user { get; set; }
+
         [JsonIgnore]
         public int? cd_specialty_type { get; set; }
+
+        [JsonPropertyName("observation")]
+        public string? ds_observation { get; set; }
+
         [ForeignKey("cd_specialty_type")]
         public SpecialtyType specialtyType { get; set; } = null!;
+
         [JsonIgnore]
         [ForeignKey("cd_user")]
         public Users Users { get; set; }
 
-        public Doctors(string? cd_crm, int? cd_user, int? cd_specialty_type)
+        public Doctors(string? cd_crm, int? cd_user, int? cd_specialty_type, string? ds_observation)
         {
             this.cd_crm = cd_crm;
             this.cd_user = cd_user;
             this.cd_specialty_type = cd_specialty_type;
+            this.ds_observation = ds_observation;
         }
     }
 }
