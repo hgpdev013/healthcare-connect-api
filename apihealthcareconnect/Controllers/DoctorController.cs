@@ -51,7 +51,8 @@ namespace apihealthcareconnect.Controllers
                 UserDoctorsParams.email,
                 UserDoctorsParams.cellphone,
                 UserDoctorsParams.email,
-                UserDoctorsParams.userTypeId,
+                //UserDoctorsParams.userTypeId,
+                1,
                 UserDoctorsParams.streetName,
                 UserDoctorsParams.streetNumber,
                 UserDoctorsParams.complement,
@@ -60,12 +61,11 @@ namespace apihealthcareconnect.Controllers
                 UserDoctorsParams.city,
                 UserDoctorsParams.gender,
                 UserDoctorsParams.neighborhood,
-                UserDoctorsParams.isActive,
-                null);
+                UserDoctorsParams.isActive);
 
             var user = await _usersRepository.Add(userToCreate);
 
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest("Erro ao cadastrar usuário");
             }
@@ -108,7 +108,8 @@ namespace apihealthcareconnect.Controllers
             userToBeEdited.ds_email = UserDoctorsParams.email;
             userToBeEdited.ds_cellphone = UserDoctorsParams.cellphone;
             userToBeEdited.ds_login = UserDoctorsParams.email;
-            userToBeEdited.cd_user_type = UserDoctorsParams.userTypeId;
+            //userToBeEdited.cd_user_type = UserDoctorsParams.userTypeId;
+            userToBeEdited.cd_user_type = 1;
             userToBeEdited.nm_street = UserDoctorsParams.streetName;
             userToBeEdited.cd_street_number = UserDoctorsParams.streetNumber;
             userToBeEdited.ds_complement = UserDoctorsParams.complement;

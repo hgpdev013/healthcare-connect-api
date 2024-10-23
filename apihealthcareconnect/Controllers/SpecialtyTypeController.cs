@@ -16,7 +16,7 @@ namespace apihealthcareconnect.Controllers
             _specialtyTypeRepository = specialtyTypeRepository ?? throw new ArgumentNullException();
         }
 
-        
+
         [HttpGet]
         [ProducesResponseType(typeof(List<SpecialtyType>), 200)]
         public async Task<IActionResult> GetSpecialties()
@@ -46,6 +46,14 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
+            if(specialtyTypeParams.GetType()
+                .GetProperties()
+                .Where(p => p.PropertyType == typeof(string))
+                .Any(p => string.IsNullOrEmpty((string)p.GetValue(specialtyTypeParams))))
+            {
+                return BadRequest("Todos os campos devem ser preenchidos.");
+            }
+
             var specialty = new SpecialtyType(null,
                 specialtyTypeParams.description,
                 specialtyTypeParams.intervalBetweenAppointments,
@@ -65,7 +73,7 @@ namespace apihealthcareconnect.Controllers
 
             var specialtyToUpdate = await _specialtyTypeRepository.GetById(specialtyTypeParams.id);
 
-            if(specialtyToUpdate == null)
+            if (specialtyToUpdate == null)
             {
                 return NotFound("Especialidade não encontrada");
             }

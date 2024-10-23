@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -57,9 +58,8 @@ namespace apihealthcareconnect.Models
         public string? ds_gender {  get; set; }
 
         [JsonPropertyName("isActive")]
-        public bool? is_active { get; set; }
+        public bool is_active { get; set; }
 
-        [JsonIgnore]
         public string? ds_password { get; set; }
 
         [JsonPropertyName("userTypeId")]
@@ -68,7 +68,7 @@ namespace apihealthcareconnect.Models
         public Doctors? doctorData { get; set; }
 
         public Users(int? cd_user, string cd_cpf, string cd_identification, string nm_user, DateTime dt_birth, string ds_email, string ds_cellphone, string ds_login, int cd_user_type, string? nm_street,
-            int? cd_street_number, string? ds_complement, string? nm_state, string? cd_cep, string? nm_city, string? ds_gender, string? ds_neighborhood, bool? is_active, string? ds_password)
+            int? cd_street_number, string? ds_complement, string? nm_state, string? cd_cep, string? nm_city, string? ds_gender, string? ds_neighborhood, bool is_active)
         {
             this.cd_user = cd_user;
             this.cd_cpf = cd_cpf;
@@ -88,7 +88,6 @@ namespace apihealthcareconnect.Models
             this.ds_gender = ds_gender;
             this.ds_neighborhood = ds_neighborhood;
             this.is_active = is_active;
-            this.ds_password = ds_password;
         }
     }
 }
