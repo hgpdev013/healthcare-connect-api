@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -12,15 +11,12 @@ namespace apihealthcareconnect.Models
         [JsonPropertyName("id")]
         public int? cd_specialty_type { get; set; }
 
-        [JsonRequired]
         [JsonPropertyName("specialtyName")]
         public string ds_specialty_type { get; set; }
 
-        [JsonRequired]
         [JsonPropertyName("intervalBetweenAppointments")]
         public string dt_interval_between_appointments { get; set; }
 
-        [JsonRequired]
         [JsonPropertyName("isActive")]
         public bool is_active { get; set; }
 

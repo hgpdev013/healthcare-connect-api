@@ -12,11 +12,9 @@ namespace apihealthcareconnect.Models
         [JsonPropertyName("id")]
         public int? cd_user_type { get; set; }
 
-        [JsonRequired]
         [JsonPropertyName("name")]
         public string ds_user_type { get; set; }
 
-        [JsonRequired]
         [JsonPropertyName("isActive")]
         public bool is_active { get; set; }
 

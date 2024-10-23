@@ -1,23 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace apihealthcareconnect.Models
 {
+    [Table("pacients")]
     public class Pacients
     {
-        public int Id { get; set; }
+        [Key]
+        [JsonIgnore]
+        public int cd_pacient { get; set; }
 
-        //Relacionamento de N para 1 com Users
-        [ForeignKey("UserId")]
-        public int UserId{ get; set; }
+        [JsonIgnore]
+        [ForeignKey("cd_user")]
         public Users Users { get; set; }
 
-        //Relacionamento de 1 para N com Appointments
-        public ICollection<Appointments> Appointments { get; set; }
+        public List<Allergies> Allergies { get; set; }
 
-        //Relacionamento de 1 para N com Allergies
-        public ICollection<Allergies> Allergies { get; set; }
-
-        //Relacionamento de 1 para N com Exams
-        public ICollection<Exams> Exams { get; set; }
+        public Pacients()
+        {
+        }
     }
 }
