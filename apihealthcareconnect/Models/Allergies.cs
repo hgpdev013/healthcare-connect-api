@@ -15,10 +15,9 @@ namespace apihealthcareconnect.Models
         public string nm_allergy { get; set; }
 
         [JsonIgnore]
+        [ForeignKey("cd_pacient")]
         public int cd_pacient { get; set; }
 
-        [ForeignKey("cd_pacient")]
-        public SpecialtyType specialtyType { get; set; } = null!;
 
         public Allergies(int? cd_allergy, string nm_allergy, int cd_pacient)
         {
