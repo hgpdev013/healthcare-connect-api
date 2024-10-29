@@ -4,7 +4,7 @@ namespace apihealthcareconnect.ViewModel
 {
     public class UsersViewModel
     {
-        public int id { get; set; }
+        public int? id { get; set; }
 
         public string cpf { get; set; }
 
@@ -38,6 +38,6 @@ namespace apihealthcareconnect.ViewModel
 
         public string? gender { get; set; }
 
-        public bool? isActive { get; set; }
+        public bool isActive { get; set; }
     }
 }

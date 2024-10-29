@@ -8,5 +8,6 @@ namespace apihealthcareconnect.Interfaces
         Task<Users> Update(Users users);
         Task<List<Users>> GetAll();
         Task<Users> GetById(int id);
+        Task<List<Users>> GetByUserTypeId(int userTypeid);
     }
 }
