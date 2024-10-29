@@ -68,6 +68,8 @@ namespace apihealthcareconnect.Models
 
         public Doctors? doctorData { get; set; }
 
+        public Pacients? pacientData { get; set; }
+
         [ForeignKey("cd_user_type")]
         public UserType? userType { get; set; }
 

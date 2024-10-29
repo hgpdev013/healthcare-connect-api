@@ -12,6 +12,9 @@ namespace apihealthcareconnect.Models
         public int cd_pacient { get; set; }
 
         [JsonIgnore]
+        public int cd_user { get; set; }
+
+        [JsonIgnore]
         [ForeignKey("cd_user")]
         public Users Users { get; set; }
 

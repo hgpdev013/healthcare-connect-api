@@ -12,6 +12,7 @@ namespace apihealthcareconnect.Repositories
         {
             return await _context.Users.Where(x => x.cd_user_type == 1)
                 .Include(i => i.userType)
+                .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .ToListAsync();
         }
@@ -20,6 +21,7 @@ namespace apihealthcareconnect.Repositories
         {
             return await _context.Users.Where(x => x.cd_user_type == 1)
                 .Include(i => i.userType)
+                .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .FirstOrDefaultAsync(x => x.cd_user == id);
         }
