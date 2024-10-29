@@ -18,6 +18,9 @@ namespace apihealthcareconnect.Models
         [JsonPropertyName("isActive")]
         public bool is_active { get; set; }
 
+        [JsonPropertyName("permissions")]
+        public UserTypePermissions permissions { get; set; }
+
         public UserType(int? cd_user_type, string ds_user_type, bool is_active)
         {
             this.cd_user_type = cd_user_type;
