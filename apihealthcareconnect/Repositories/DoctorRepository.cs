@@ -10,12 +10,18 @@ namespace apihealthcareconnect.Repositories
         private readonly ConnectionContext _context = new ConnectionContext();
         public async Task<List<Users>> GetAll()
         {
-            return await _context.Users.Where(x => x.cd_user_type == 1).Include(i => i.doctorData).ThenInclude(i => i.specialtyType).ToListAsync();
+            return await _context.Users.Where(x => x.cd_user_type == 1)
+                .Include(i => i.userType)
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .ToListAsync();
         }
 
         public async Task<Users> GetById(int id)
         {
-            return await _context.Users.Where(x => x.cd_user_type == 1).Include(i => i.doctorData).ThenInclude(i => i.specialtyType).FirstOrDefaultAsync(x => x.cd_user == id);
+            return await _context.Users.Where(x => x.cd_user_type == 1)
+                .Include(i => i.userType)
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .FirstOrDefaultAsync(x => x.cd_user == id);
         }
 
         public async Task<Doctors> Add(Doctors doctors)

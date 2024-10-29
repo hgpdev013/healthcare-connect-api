@@ -26,22 +26,25 @@ namespace apihealthcareconnect.Repositories
         public async Task<List<Users>> GetAll()
         {
             return await _context.Users.OrderBy(x => x.nm_user)
-                .Include(i => i.doctorData)
-                .ThenInclude(i => i.specialtyType).ToListAsync();
+                .Include(i => i.userType)
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .ToListAsync();
         }
 
         public async Task<Users> GetById(int id)
         {
             return await _context.Users
-                .Include(i => i.doctorData)
-                .ThenInclude(i => i.specialtyType).FirstOrDefaultAsync(x => x.cd_user == id);
+                .Include(i => i.userType)
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .FirstOrDefaultAsync(x => x.cd_user == id);
         }
 
         public async Task<List<Users>> GetByUserTypeId(int userTypeId)
         {
             return await _context.Users.Where(x => x.cd_user_type == userTypeId)
-                .Include(i => i.doctorData)
-                .ThenInclude(i => i.specialtyType).ToListAsync();
+                .Include(i => i.userType)
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .ToListAsync();
         }
     }
 }
