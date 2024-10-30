@@ -26,6 +26,7 @@ namespace apihealthcareconnect.Repositories
         public async Task<List<Users>> GetAll()
         {
             return await _context.Users.OrderBy(x => x.nm_user)
+                .Where(x => !new[] { 1 , 2 }.Contains(x.cd_user_type))
                 .Include(i => i.userType).ThenInclude(i => i.permissions)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
