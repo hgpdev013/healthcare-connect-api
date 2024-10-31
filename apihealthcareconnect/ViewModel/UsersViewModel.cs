@@ -18,8 +18,6 @@ namespace apihealthcareconnect.ViewModel
 
         public string cellphone { get; set; }
 
-        public string login { get; set; }
-
         public int userTypeId { get; set; }
 
         public string? streetName { get; set; }
