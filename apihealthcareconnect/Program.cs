@@ -23,9 +23,11 @@ namespace apihealthcareconnect
             });
             builder.Services.AddControllers();
             builder.Services.AddScoped<IUserTypeRepository, UserTypeRepository>();
+            builder.Services.AddScoped<IUserTypePermissionsRepository, UserTypePermissionsRepository>();
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
             builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
             builder.Services.AddScoped<ISpecialtyTypeRepository, SpecialtyTypeRepository>();
+
 
             //builder.Services.AddTransient<>
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -48,7 +48,7 @@ namespace apihealthcareconnect.Models
 
 
         public UserTypePermissions(int? cd_user_type_permission, bool sg_doctors_list, bool sg_pacients_list, bool sg_employees_list,
-            bool sg_patients_edit, bool sg_patients_allergy_edit, bool sg_appointment_create, bool sg_edit_appointmente_obs, bool sg_take_exams, bool sg_take_prescriptions)
+            bool sg_patients_edit, bool sg_patients_allergy_edit, bool sg_appointment_create, bool sg_edit_appointmente_obs, bool sg_take_exams, bool sg_take_prescriptions, int cd_user_type)
         {
             this.cd_user_type_permission = cd_user_type_permission ?? null;
             this.sg_doctors_list = sg_doctors_list;
@@ -60,6 +60,7 @@ namespace apihealthcareconnect.Models
             this.sg_edit_appointmente_obs = sg_edit_appointmente_obs;
             this.sg_take_exams = sg_take_exams;
             this.sg_take_prescriptions = sg_take_prescriptions;
+            this.cd_user_type = cd_user_type;
         }
     }
 }

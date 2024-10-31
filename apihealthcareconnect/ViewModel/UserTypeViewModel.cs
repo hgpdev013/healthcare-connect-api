@@ -7,5 +7,7 @@
         public string name { get; set; }
 
         public bool isActive { get; set; }
+
+        public UserTypePermissionsViewModel permissions { get; set; }
     }
 }
