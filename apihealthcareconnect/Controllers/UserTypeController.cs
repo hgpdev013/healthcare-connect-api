@@ -103,7 +103,12 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userTypeToUpdate = await _userTypeRepository.GetById(userTypeViewModel.id);
+            if (userTypeViewModel.id == null)
+            {
+                return BadRequest("O Id deve ser enviado para atualizar os dados");
+            }
+
+            var userTypeToUpdate = await _userTypeRepository.GetById(userTypeViewModel.id!.Value);
             if (userTypeToUpdate == null)
             {
                 return NotFound("Tipo de usuário a ser atualizado não existe na base de dados.");
@@ -114,6 +119,25 @@ namespace apihealthcareconnect.Controllers
             userTypeToUpdate.is_active = userTypeViewModel.isActive;
             
             var updatedUserType = await _userTypeRepository.Update(userTypeToUpdate);
+
+            userTypeToUpdate.permissions.cd_user_type = userTypeViewModel.id!.Value;
+            userTypeToUpdate.permissions.sg_doctors_list = userTypeViewModel.permissions.listOfDoctors;
+            userTypeToUpdate.permissions.sg_pacients_list = userTypeViewModel.permissions.listOfPatients;
+            userTypeToUpdate.permissions.sg_employees_list = userTypeViewModel.permissions.listOfEmployees;
+            userTypeToUpdate.permissions.sg_patients_edit = userTypeViewModel.permissions.canEditInfoPatient;
+            userTypeToUpdate.permissions.sg_patients_allergy_edit = userTypeViewModel.permissions.canEditAllergiesPatient;
+            userTypeToUpdate.permissions.sg_appointment_create = userTypeViewModel.permissions.makeAppointment;
+            userTypeToUpdate.permissions.sg_edit_appointmente_obs = userTypeViewModel.permissions.canEditObsAppointment;
+            userTypeToUpdate.permissions.sg_take_exams = userTypeViewModel.permissions.canTakeExams;
+            userTypeToUpdate.permissions.sg_take_prescriptions = userTypeViewModel.permissions.canTakePrescription;
+
+            var updatedPermissions = await _userTypePermissionsRepository.UpdateUserTypePermissions(userTypeToUpdate.permissions);
+
+            if(updatedPermissions == null)
+            {
+                return BadRequest("Não foi possível atualizar as permissões do tipo de usuário");
+            }
+
             return Ok(updatedUserType);
         }
     }
