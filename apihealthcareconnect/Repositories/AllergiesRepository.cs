@@ -14,29 +14,41 @@ namespace apihealthcareconnect.Repositories
             return await _context.Allergies.ToListAsync();
         }
 
-        public async Task<List<Allergies>> GetAllergiesByUserId(int userId)
+        public async Task<List<Allergies>> GetAllergiesByUserId(int pacientId)
         {
-            throw new NotImplementedException();
+            return await _context.Allergies.Where(x => x.cd_pacient == pacientId).ToListAsync();
         }
 
         public async Task<Allergies> Add(Allergies allergies)
         {
-            throw new NotImplementedException();
+            var createdAllergy = await _context.Allergies.AddAsync(allergies);
+            await _context.SaveChangesAsync();
+
+            return createdAllergy.Entity;
         }
 
         public async Task<List<Allergies>> AddMultiple(List<Allergies> allergies)
         {
-            throw new NotImplementedException();
+            await _context.Allergies.AddRangeAsync(allergies);
+            await _context.SaveChangesAsync();
+
+            return allergies;
         }
 
         public async Task<Allergies> Update(Allergies allergies)
         {
-            throw new NotImplementedException();
+            var updatedAllergy = _context.Update(allergies);
+            await _context.SaveChangesAsync();
+
+            return updatedAllergy.Entity;
         }
 
         public async Task<List<Allergies>> UpdateMultiple(List<Allergies> allergies)
         {
-            throw new NotImplementedException();
+            _context.Allergies.UpdateRange(allergies);
+            await _context.SaveChangesAsync();
+
+            return allergies;
         }
     }
 }

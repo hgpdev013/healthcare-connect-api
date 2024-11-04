@@ -6,7 +6,7 @@ namespace apihealthcareconnect.Interfaces
     {
         Task<List<Allergies>> GetAll();
 
-        Task<List<Allergies>> GetAllergiesByUserId(int userId);
+        Task<List<Allergies>> GetAllergiesByUserId(int pacientId);
 
         Task<Allergies> Add(Allergies allergies);
 
