@@ -7,7 +7,12 @@ namespace apihealthcareconnect.Repositories
 {
     public class AllergiesRepository : IAllergiesRepository
     {
-        private readonly ConnectionContext _context = new ConnectionContext();
+        private readonly ConnectionContext _context;
+
+        public AllergiesRepository(ConnectionContext context)
+        {
+            _context = context;
+        }
 
         public async Task<List<Allergies>> GetAll()
         {

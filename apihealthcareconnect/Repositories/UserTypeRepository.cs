@@ -7,7 +7,12 @@ namespace apihealthcareconnect.Repositories
 {
     public class UserTypeRepository : IUserTypeRepository
     {
-        private readonly ConnectionContext _context = new ConnectionContext();
+        private readonly ConnectionContext _context;
+
+        public UserTypeRepository(ConnectionContext context)
+        {
+            _context = context;
+        }
         public async Task<List<UserType>> GetAll()
         {
             return await _context.UserTypes

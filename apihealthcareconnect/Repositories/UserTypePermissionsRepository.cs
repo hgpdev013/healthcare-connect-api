@@ -6,7 +6,12 @@ namespace apihealthcareconnect.Repositories
 {
     public class UserTypePermissionsRepository : IUserTypePermissionsRepository
     {
-        private readonly ConnectionContext _context = new ConnectionContext();
+        private readonly ConnectionContext _context;
+
+        public UserTypePermissionsRepository(ConnectionContext context)
+        {
+            _context = context;
+        }
 
         public async Task<UserTypePermissions> AddUserTypePermissions(UserTypePermissions userTypePermissions)
         {

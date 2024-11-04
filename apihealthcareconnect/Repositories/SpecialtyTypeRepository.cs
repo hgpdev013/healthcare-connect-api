@@ -7,7 +7,13 @@ namespace apihealthcareconnect.Repositories
 {
     public class SpecialtyTypeRepository : ISpecialtyTypeRepository
     {
-        private readonly ConnectionContext _context = new ConnectionContext();
+        private readonly ConnectionContext _context;
+
+        public SpecialtyTypeRepository(ConnectionContext context)
+        {
+            _context = context;
+        }
+
         public async Task<List<SpecialtyType>> GetAll()
         {
             return await _context.SpecialtyType.OrderBy(s => s.ds_specialty_type).ToListAsync();

@@ -1,14 +1,18 @@
+using apihealthcareconnect.Infraestrutura;
 using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Repositories;
-using apihealthcareconnect.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace apihealthcareconnect
 {
     public class Program {
         public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Configuration
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
 
             // Add services to the container.
             builder.Services.AddCors(options =>
@@ -21,6 +25,14 @@ namespace apihealthcareconnect
                                .AllowAnyHeader();
                     });
             });
+
+            builder.Services.AddDbContext<ConnectionContext>(options =>
+                options.UseMySql(
+                    builder.Configuration.GetConnectionString("HealthcareConnect"),
+                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("HealthcareConnect"))
+                )
+            );
+
             builder.Services.AddControllers();
             builder.Services.AddScoped<IUserTypeRepository, UserTypeRepository>();
             builder.Services.AddScoped<IUserTypePermissionsRepository, UserTypePermissionsRepository>();

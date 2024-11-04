@@ -7,7 +7,13 @@ namespace apihealthcareconnect.Repositories
 {
     public class PacientRepository : IPacientRepository
     {
-        private readonly ConnectionContext _context = new ConnectionContext();
+        private readonly ConnectionContext _context;
+
+        public PacientRepository(ConnectionContext context)
+        {
+            _context = context;
+        }
+
         public async Task<List<Users>> GetAll()
         {
             return await _context.Users.Where(x => x.cd_user_type == 2)

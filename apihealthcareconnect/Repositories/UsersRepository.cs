@@ -7,7 +7,12 @@ namespace apihealthcareconnect.Repositories
 {
     public class UsersRepository : IUsersRepository
     {
-        private readonly ConnectionContext _context = new ConnectionContext();
+        private readonly ConnectionContext _context;
+
+        public UsersRepository(ConnectionContext context)
+        {
+            _context = context;
+        }
 
         public async Task<Users> Add(Users users)
         {
