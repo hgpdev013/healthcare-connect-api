@@ -16,11 +16,11 @@ namespace apihealthcareconnect.Controllers
             _usersRepository = usersRepository ?? throw new ArgumentNullException();
         }
 
-        [HttpGet]
+        [HttpGet("only-general-employees")]
         [ProducesResponseType(typeof(List<Users>), 200)]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers(bool? showAllUserTypes)
         {
-            var users = await _usersRepository.GetAll();
+            var users = await _usersRepository.GetAllExceptMedicAndPatient(showAllUserTypes ?? false);
             return Ok(users);
         }
 

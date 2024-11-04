@@ -23,7 +23,7 @@ namespace apihealthcareconnect.Controllers
         [ProducesResponseType(typeof(List<Users>), 200)]
         public async Task<IActionResult> GetDoctors()
         {
-            var doctors = await _doctorRepository.GetAll();
+            var doctors = await _usersRepository.GetByUserTypeId(1);
             return Ok(doctors);
         }
 
@@ -31,7 +31,13 @@ namespace apihealthcareconnect.Controllers
         [ProducesResponseType(typeof(Users), 200)]
         public async Task<IActionResult> GetDoctorById(int id)
         {
-            var doctor = await _doctorRepository.GetById(id);
+            var doctor = await _usersRepository.GetById(id);
+
+            if(doctor.cd_user_type != 1)
+            {
+                return BadRequest("Usuário não é médico");
+            }
+
             return Ok(doctor);
         }
 
@@ -63,26 +69,28 @@ namespace apihealthcareconnect.Controllers
                 UserDoctorsParams.neighborhood,
                 UserDoctorsParams.isActive);
 
-            var user = await _usersRepository.Add(userToCreate);
+            var createdUser = await _usersRepository.Add(userToCreate);
 
-            if (user == null)
+            if (createdUser == null)
             {
                 return BadRequest("Erro ao cadastrar usuário");
             }
 
             var doctorToCreate = new Doctors(UserDoctorsParams.doctorData.crm,
-                user.cd_user,
+                createdUser.cd_user,
                 UserDoctorsParams.doctorData.specialtyTypeId,
                 UserDoctorsParams.doctorData.observation);
 
-            var doctor = await _doctorRepository.Add(doctorToCreate);
+            var createdDoctor = await _doctorRepository.Add(doctorToCreate);
 
-            if (doctor == null)
+            if (createdDoctor == null)
             {
                 return BadRequest("Erro ao relacionar usuário como médico");
             }
 
-            return Ok(new { user, doctorData = doctor });
+            createdUser.doctorData = createdDoctor;
+
+            return Ok(createdUser);
         }
 
         [HttpPut]
@@ -93,11 +101,16 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userToBeEdited = await _doctorRepository.GetById(UserDoctorsParams.id!.Value);
+            var userToBeEdited = await _usersRepository.GetById(UserDoctorsParams.id!.Value);
 
             if (userToBeEdited == null)
             {
                 return NotFound("Usuário não encontrado");
+            }
+
+            if(userToBeEdited.cd_user_type != 1)
+            {
+                return BadRequest("Usuário não é médico");
             }
 
             userToBeEdited.cd_user = UserDoctorsParams.id;
@@ -122,14 +135,14 @@ namespace apihealthcareconnect.Controllers
 
             var editedUser = await _usersRepository.Update(userToBeEdited);
 
-            userToBeEdited.doctorData.cd_crm = UserDoctorsParams.doctorData.crm;
-            userToBeEdited.doctorData.cd_specialty_type = UserDoctorsParams.doctorData.specialtyTypeId;
-            userToBeEdited.doctorData.cd_user = UserDoctorsParams.id;
-            userToBeEdited.doctorData.ds_observation = UserDoctorsParams.doctorData.observation;
+            editedUser.doctorData.cd_crm = UserDoctorsParams.doctorData.crm;
+            editedUser.doctorData.cd_specialty_type = UserDoctorsParams.doctorData.specialtyTypeId;
+            editedUser.doctorData.cd_user = UserDoctorsParams.id;
+            editedUser.doctorData.ds_observation = UserDoctorsParams.doctorData.observation;
 
-            var editedDoctor = await _doctorRepository.Update(userToBeEdited.doctorData);
+            var editedDoctor = await _doctorRepository.Update(editedUser.doctorData);
 
-            return Ok(new { user = editedUser, doctorData = editedDoctor });
+            return Ok(editedUser);
         }
     }
 }

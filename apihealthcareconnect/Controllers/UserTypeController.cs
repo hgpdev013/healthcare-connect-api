@@ -120,18 +120,18 @@ namespace apihealthcareconnect.Controllers
             
             var updatedUserType = await _userTypeRepository.Update(userTypeToUpdate);
 
-            userTypeToUpdate.permissions.cd_user_type = userTypeViewModel.id!.Value;
-            userTypeToUpdate.permissions.sg_doctors_list = userTypeViewModel.permissions.listOfDoctors;
-            userTypeToUpdate.permissions.sg_pacients_list = userTypeViewModel.permissions.listOfPatients;
-            userTypeToUpdate.permissions.sg_employees_list = userTypeViewModel.permissions.listOfEmployees;
-            userTypeToUpdate.permissions.sg_patients_edit = userTypeViewModel.permissions.canEditInfoPatient;
-            userTypeToUpdate.permissions.sg_patients_allergy_edit = userTypeViewModel.permissions.canEditAllergiesPatient;
-            userTypeToUpdate.permissions.sg_appointment_create = userTypeViewModel.permissions.makeAppointment;
-            userTypeToUpdate.permissions.sg_edit_appointmente_obs = userTypeViewModel.permissions.canEditObsAppointment;
-            userTypeToUpdate.permissions.sg_take_exams = userTypeViewModel.permissions.canTakeExams;
-            userTypeToUpdate.permissions.sg_take_prescriptions = userTypeViewModel.permissions.canTakePrescription;
+            updatedUserType.permissions.cd_user_type = userTypeViewModel.id!.Value;
+            updatedUserType.permissions.sg_doctors_list = userTypeViewModel.permissions.listOfDoctors;
+            updatedUserType.permissions.sg_pacients_list = userTypeViewModel.permissions.listOfPatients;
+            updatedUserType.permissions.sg_employees_list = userTypeViewModel.permissions.listOfEmployees;
+            updatedUserType.permissions.sg_patients_edit = userTypeViewModel.permissions.canEditInfoPatient;
+            updatedUserType.permissions.sg_patients_allergy_edit = userTypeViewModel.permissions.canEditAllergiesPatient;
+            updatedUserType.permissions.sg_appointment_create = userTypeViewModel.permissions.makeAppointment;
+            updatedUserType.permissions.sg_edit_appointmente_obs = userTypeViewModel.permissions.canEditObsAppointment;
+            updatedUserType.permissions.sg_take_exams = userTypeViewModel.permissions.canTakeExams;
+            updatedUserType.permissions.sg_take_prescriptions = userTypeViewModel.permissions.canTakePrescription;
 
-            var updatedPermissions = await _userTypePermissionsRepository.UpdateUserTypePermissions(userTypeToUpdate.permissions);
+            var updatedPermissions = await _userTypePermissionsRepository.UpdateUserTypePermissions(updatedUserType.permissions);
 
             if(updatedPermissions == null)
             {

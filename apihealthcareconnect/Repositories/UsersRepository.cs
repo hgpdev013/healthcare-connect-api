@@ -28,10 +28,10 @@ namespace apihealthcareconnect.Repositories
             return updatedUser.Entity;
         }
 
-        public async Task<List<Users>> GetAll()
+        public async Task<List<Users>> GetAllExceptMedicAndPatient(bool showAllUserTypes)
         {
             return await _context.Users.OrderBy(x => x.nm_user)
-                .Where(x => !new[] { 1 , 2 }.Contains(x.cd_user_type))
+                .Where(x => !showAllUserTypes ? !new[] { 1 , 2 }.Contains(x.cd_user_type) : true)
                 .Include(i => i.userType).ThenInclude(i => i.permissions)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
