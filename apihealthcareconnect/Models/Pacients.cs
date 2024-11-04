@@ -9,7 +9,7 @@ namespace apihealthcareconnect.Models
     {
         [Key]
         [JsonIgnore]
-        public int cd_pacient { get; set; }
+        public int? cd_pacient { get; set; }
 
         [JsonIgnore]
         public int cd_user { get; set; }
@@ -20,8 +20,10 @@ namespace apihealthcareconnect.Models
 
         public List<Allergies> Allergies { get; set; }
 
-        public Pacients()
+        public Pacients(int? cd_pacient, int cd_user)
         {
+            this.cd_pacient = cd_pacient;
+            this.cd_user = cd_user;
         }
     }
 }
