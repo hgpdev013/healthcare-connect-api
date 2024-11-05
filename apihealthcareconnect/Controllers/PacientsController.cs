@@ -11,11 +11,15 @@ namespace apihealthcareconnect.Controllers
     {
         private readonly IPacientRepository _pacientRepository;
         private readonly IUsersRepository _usersRepository;
+        private readonly IAllergiesRepository _allergiesRepository;
 
-        public PacientsController(IPacientRepository _pacientRepository, IUsersRepository usersRepository)
+        public PacientsController(IPacientRepository pacientRepository,
+            IUsersRepository usersRepository,
+            IAllergiesRepository allergiesRepository)
         {
-            _pacientRepository = _pacientRepository ?? throw new ArgumentNullException();
+            _pacientRepository = pacientRepository ?? throw new ArgumentNullException();
             _usersRepository = usersRepository ?? throw new ArgumentNullException();
+            _allergiesRepository = allergiesRepository ?? throw new ArgumentNullException();
         }
 
 
@@ -43,104 +47,138 @@ namespace apihealthcareconnect.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostDoctors(UsersDoctorsRequestViewModel UserDoctorsParams)
+        [ProducesResponseType(typeof(Users), 201)]
+        public async Task<IActionResult> PostPacient(UsersPacientsRequestViewModel UserPacientsParams)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            //var userToCreate = new Users(UserDoctorsParams.id,
-            //    UserDoctorsParams.cpf,
-            //    UserDoctorsParams.documentNumber,
-            //    UserDoctorsParams.name,
-            //    UserDoctorsParams.dateOfBirth,
-            //    UserDoctorsParams.email,
-            //    UserDoctorsParams.cellphone,
-            //    UserDoctorsParams.email,
-            //    //UserDoctorsParams.userTypeId,
-            //    1,
-            //    UserDoctorsParams.streetName,
-            //    UserDoctorsParams.streetNumber,
-            //    UserDoctorsParams.complement,
-            //    UserDoctorsParams.state,
-            //    UserDoctorsParams.cep,
-            //    UserDoctorsParams.city,
-            //    UserDoctorsParams.gender,
-            //    UserDoctorsParams.neighborhood,
-            //    UserDoctorsParams.isActive);
+            var userToCreate = new Users(UserPacientsParams.id,
+                UserPacientsParams.cpf,
+                UserPacientsParams.documentNumber,
+                UserPacientsParams.name,
+                UserPacientsParams.dateOfBirth,
+                UserPacientsParams.email,
+                UserPacientsParams.cellphone,
+                UserPacientsParams.email,
+                //UserPacientsParams.userTypeId,
+                2,
+                UserPacientsParams.streetName,
+                UserPacientsParams.streetNumber,
+                UserPacientsParams.complement,
+                UserPacientsParams.state,
+                UserPacientsParams.cep,
+                UserPacientsParams.city,
+                UserPacientsParams.gender,
+                UserPacientsParams.neighborhood,
+                UserPacientsParams.isActive);
 
-            //var user = await _usersRepository.Add(userToCreate);
+            var createdUser = await _usersRepository.Add(userToCreate);
 
-            //if (user == null)
-            //{
-            //    return BadRequest("Erro ao cadastrar usuário");
-            //}
+            if (createdUser == null)
+            {
+                return BadRequest("Erro ao cadastrar usuário");
+            }
 
-            //var doctorToCreate = new Doctors(UserDoctorsParams.doctorData.crm,
-            //    user.cd_user,
-            //    UserDoctorsParams.doctorData.specialtyTypeId,
-            //    UserDoctorsParams.doctorData.observation);
+            var pacientToCreate = new Pacients(null, createdUser.cd_user!.Value);
 
-            //var doctor = await _doctorRepository.Add(doctorToCreate);
+            var createdPacient = await _pacientRepository.Add(pacientToCreate);
 
-            //if (doctor == null)
-            //{
-            //    return BadRequest("Erro ao relacionar usuário como médico");
-            //}
+            if (createdPacient == null)
+            {
+                return BadRequest("Erro ao relacionar usuário como paciente");
+            }
 
-            //return Ok(new { user, doctorData = doctor });
+            var allergiesToCreate = UserPacientsParams.pacientData.Allergies
+                                    .Select(vm => new Allergies(vm.id, vm.allergy, createdUser.pacientData!.cd_pacient!.Value))
+                                    .ToList();
 
-            return BadRequest();
+            var createdMultipleAllergies = await _allergiesRepository.AddMultiple(allergiesToCreate);
+
+            if(createdMultipleAllergies == null)
+            {
+                return BadRequest("Erro ao relacionar alergias ao paciente");
+            }
+
+
+            createdUser.pacientData.cd_user = createdUser.cd_user!.Value;
+            createdUser.pacientData.cd_pacient = createdPacient.cd_pacient;
+            createdUser.pacientData.Allergies = createdMultipleAllergies;
+
+            return Ok(createdUser);
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutDoctors(UsersDoctorsRequestViewModel UserDoctorsParams)
+        [ProducesResponseType(typeof(Users), 200)]
+        public async Task<IActionResult> PutPacient(UsersPacientsRequestViewModel UserPacientsParams)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            //var userToBeEdited = await _doctorRepository.GetById(UserDoctorsParams.id!.Value);
+            var userToBeEdited = await _usersRepository.GetById(UserPacientsParams.id!.Value);
 
-            //if (userToBeEdited == null)
-            //{
-            //    return NotFound("Usuário não encontrado");
-            //}
+            if (userToBeEdited == null)
+            {
+                return NotFound("Usuário não encontrado");
+            }
 
-            //userToBeEdited.cd_user = UserDoctorsParams.id;
-            //userToBeEdited.cd_cpf = UserDoctorsParams.cpf;
-            //userToBeEdited.cd_identification = UserDoctorsParams.documentNumber;
-            //userToBeEdited.nm_user = UserDoctorsParams.name;
-            //userToBeEdited.dt_birth = UserDoctorsParams.dateOfBirth;
-            //userToBeEdited.ds_email = UserDoctorsParams.email;
-            //userToBeEdited.ds_cellphone = UserDoctorsParams.cellphone;
-            //userToBeEdited.ds_login = UserDoctorsParams.email;
-            ////userToBeEdited.cd_user_type = UserDoctorsParams.userTypeId;
-            //userToBeEdited.cd_user_type = 1;
-            //userToBeEdited.nm_street = UserDoctorsParams.streetName;
-            //userToBeEdited.cd_street_number = UserDoctorsParams.streetNumber;
-            //userToBeEdited.ds_complement = UserDoctorsParams.complement;
-            //userToBeEdited.nm_state = UserDoctorsParams.state;
-            //userToBeEdited.cd_cep = UserDoctorsParams.cep;
-            //userToBeEdited.nm_city = UserDoctorsParams.city;
-            //userToBeEdited.ds_gender = UserDoctorsParams.gender;
-            //userToBeEdited.ds_neighborhood = UserDoctorsParams.neighborhood;
-            //userToBeEdited.is_active = UserDoctorsParams.isActive;
+            if (userToBeEdited.cd_user_type != 2)
+            {
+                return BadRequest("Usuário não é do tipo paciente");
+            }
 
-            //var editedUser = await _usersRepository.Update(userToBeEdited);
+            userToBeEdited.cd_user = UserPacientsParams.id;
+            userToBeEdited.cd_cpf = UserPacientsParams.cpf;
+            userToBeEdited.cd_identification = UserPacientsParams.documentNumber;
+            userToBeEdited.nm_user = UserPacientsParams.name;
+            userToBeEdited.dt_birth = UserPacientsParams.dateOfBirth;
+            userToBeEdited.ds_email = UserPacientsParams.email;
+            userToBeEdited.ds_cellphone = UserPacientsParams.cellphone;
+            userToBeEdited.ds_login = UserPacientsParams.email;
+            //userToBeEdited.cd_user_type = UserPacientsParams.userTypeId;
+            userToBeEdited.cd_user_type = 2;
+            userToBeEdited.nm_street = UserPacientsParams.streetName;
+            userToBeEdited.cd_street_number = UserPacientsParams.streetNumber;
+            userToBeEdited.ds_complement = UserPacientsParams.complement;
+            userToBeEdited.nm_state = UserPacientsParams.state;
+            userToBeEdited.cd_cep = UserPacientsParams.cep;
+            userToBeEdited.nm_city = UserPacientsParams.city;
+            userToBeEdited.ds_gender = UserPacientsParams.gender;
+            userToBeEdited.ds_neighborhood = UserPacientsParams.neighborhood;
+            userToBeEdited.is_active = UserPacientsParams.isActive;
 
-            //userToBeEdited.doctorData.cd_crm = UserDoctorsParams.doctorData.crm;
-            //userToBeEdited.doctorData.cd_specialty_type = UserDoctorsParams.doctorData.specialtyTypeId;
-            //userToBeEdited.doctorData.cd_user = UserDoctorsParams.id;
-            //userToBeEdited.doctorData.ds_observation = UserDoctorsParams.doctorData.observation;
+            var editedUser = await _usersRepository.Update(userToBeEdited);
 
-            //var editedDoctor = await _doctorRepository.Update(userToBeEdited.doctorData);
+            var pacientToBeEdited = await _pacientRepository.GetByUserId(editedUser.cd_user!.Value);
 
-            //return Ok(new { user = editedUser, doctorData = editedDoctor });
+            //ALLERGY -----------------------
 
-            return BadRequest();
+            var allergiesToBeEdited = await _allergiesRepository.GetAllergiesByUserId(editedUser.pacientData!.cd_pacient!.Value);
+
+            var existingAllergiesToUpdate = allergiesToBeEdited
+                .Select(x => x).Where(x => UserPacientsParams.pacientData.Allergies.Select(x => x.id).Contains(x.cd_allergy));
+
+            foreach (var allergy in existingAllergiesToUpdate)
+            {
+                var allergyToUpdate = UserPacientsParams.pacientData.Allergies.FirstOrDefault(a => a.id == allergy.cd_allergy);
+
+               if (allergyToUpdate != null)
+                {
+                    allergy.nm_allergy = allergyToUpdate.allergy;
+                }
+            }
+
+            var editedAllergies = await _allergiesRepository.UpdateMultiple(existingAllergiesToUpdate.ToList());
+
+            editedUser.pacientData.Allergies = editedAllergies;
+
+            //ALLERGY END-----------------------
+
+           return Ok(editedUser);
         }
     }
 }
