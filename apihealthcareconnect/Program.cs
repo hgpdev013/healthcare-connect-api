@@ -1,6 +1,7 @@
 using apihealthcareconnect.Infraestrutura;
 using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Repositories;
+using apihealthcareconnect.ResponseMappings;
 using Microsoft.EntityFrameworkCore;
 
 namespace apihealthcareconnect
@@ -42,6 +43,7 @@ namespace apihealthcareconnect
             builder.Services.AddScoped<IAllergiesRepository, AllergiesRepository>();
             builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
             builder.Services.AddScoped<IAppointmentsReturnRepository, AppointmentsReturnRepository>();
+            builder.Services.AddScoped<AppointmentResponseMapping>();
 
 
             builder.Services.AddEndpointsApiExplorer();

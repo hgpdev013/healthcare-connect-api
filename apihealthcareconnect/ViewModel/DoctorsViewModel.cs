@@ -1,6 +1,6 @@
 ﻿using apihealthcareconnect.Models;
 
-namespace apihealthcareconnect.ViewModel.Requests
+namespace apihealthcareconnect.ViewModel
 {
     public class DoctorsViewModel
     {

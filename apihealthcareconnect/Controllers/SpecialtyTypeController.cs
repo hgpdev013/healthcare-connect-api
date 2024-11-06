@@ -1,6 +1,6 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
-using apihealthcareconnect.ViewModel.Requests;
+using apihealthcareconnect.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apihealthcareconnect.Controllers

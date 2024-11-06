@@ -1,6 +1,7 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
-using apihealthcareconnect.ViewModel.Requests;
+using apihealthcareconnect.ViewModel.Reponses.Appointments;
+using apihealthcareconnect.ResponseMappings;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apihealthcareconnect.Controllers
@@ -11,16 +12,20 @@ namespace apihealthcareconnect.Controllers
     {
         private readonly IAppointmentsRepository _appointmentsRepository;
         private readonly IUsersRepository _usersRepository;
+        private readonly AppointmentResponseMapping _appointmentResponseMapping;
 
-        public AppointmentsController(IAppointmentsRepository appointmentsRepository, IUsersRepository usersRepository)
+        public AppointmentsController(IAppointmentsRepository appointmentsRepository,
+            IUsersRepository usersRepository,
+            AppointmentResponseMapping appointmentResponseMapping)
         {
             _appointmentsRepository = appointmentsRepository ?? throw new ArgumentNullException();
             _usersRepository = usersRepository ?? throw new ArgumentNullException();
+            _appointmentResponseMapping = appointmentResponseMapping ?? throw new ArgumentNullException();
         }
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<Appointments>), 200)]
+        [ProducesResponseType(typeof(List<AppointmentsResponseViewModel>), 200)]
         public async Task<IActionResult> GetAppointments(int? pacientUserId, int? doctorUserId)
         {
 
@@ -47,11 +52,15 @@ namespace apihealthcareconnect.Controllers
                 doctorByUserId?.doctorData?.cd_doctor
             );
 
-            return Ok(appointments);
+            var response = appointments
+                .Select(a => _appointmentResponseMapping.mapAppointmentResponse(a))
+                .ToList();
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Appointments), 200)]
+        [ProducesResponseType(typeof(AppointmentsResponseViewModel), 200)]
         public async Task<IActionResult> GetAppointmentById(int id)
         {
             var appointment = await _appointmentsRepository.GetById(id);
@@ -60,8 +69,10 @@ namespace apihealthcareconnect.Controllers
             {
                 return NotFound("Consulta não consta no sistema");
             }
-            
-            return Ok(appointment);
+
+            var appointmentFormatted = _appointmentResponseMapping.mapAppointmentResponse(appointment);
+
+            return Ok(appointmentFormatted);
         }
     }
 }
