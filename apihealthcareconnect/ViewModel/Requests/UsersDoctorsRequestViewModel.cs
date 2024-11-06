@@ -1,8 +1,8 @@
 ﻿using apihealthcareconnect.Models;
 
-namespace apihealthcareconnect.ViewModel
+namespace apihealthcareconnect.ViewModel.Requests
 {
-    public class UsersViewModel
+    public class UsersDoctorsRequestViewModel
     {
         public int? id { get; set; }
 
@@ -18,8 +18,6 @@ namespace apihealthcareconnect.ViewModel
 
         public string cellphone { get; set; }
 
-        public int userTypeId { get; set; }
-
         public string? streetName { get; set; }
 
         public int? streetNumber { get; set; }
@@ -34,8 +32,10 @@ namespace apihealthcareconnect.ViewModel
 
         public string? city { get; set; }
 
-        public string? gender { get; set; }
+        public string gender { get; set; }
 
         public bool isActive { get; set; }
+
+        public DoctorsViewModel doctorData { get; set; }
     }
 }

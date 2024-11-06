@@ -1,8 +1,6 @@
-﻿using apihealthcareconnect.Models;
-
-namespace apihealthcareconnect.ViewModel
+﻿namespace apihealthcareconnect.ViewModel.Requests
 {
-    public class UsersDoctorsRequestViewModel
+    public class UsersPacientsRequestViewModel
     {
         public int? id { get; set; }
 
@@ -36,6 +34,6 @@ namespace apihealthcareconnect.ViewModel
 
         public bool isActive { get; set; }
 
-        public DoctorsViewModel doctorData { get; set; }
+        public PacientsViewModel pacientData { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
 using apihealthcareconnect.Repositories;
-using apihealthcareconnect.ViewModel;
+using apihealthcareconnect.ViewModel.Requests;
 using Microsoft.AspNetCore.Mvc;
 using System.Numerics;
 

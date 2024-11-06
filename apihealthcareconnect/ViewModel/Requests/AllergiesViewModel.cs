@@ -1,4 +1,4 @@
-﻿namespace apihealthcareconnect.ViewModel
+﻿namespace apihealthcareconnect.ViewModel.Requests
 {
     public class AllergiesViewModel
     {

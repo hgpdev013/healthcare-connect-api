@@ -1,6 +1,6 @@
 ﻿using apihealthcareconnect.Models;
 
-namespace apihealthcareconnect.ViewModel
+namespace apihealthcareconnect.ViewModel.Requests
 {
     public class DoctorsViewModel
     {
@@ -8,6 +8,6 @@ namespace apihealthcareconnect.ViewModel
 
         public int specialtyTypeId { get; set; }
 
-        public string? observation {  get; set; }
+        public string? observation { get; set; }
     }
 }
