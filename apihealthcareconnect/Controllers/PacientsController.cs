@@ -162,6 +162,17 @@ namespace apihealthcareconnect.Controllers
             var existingAllergiesToUpdate = allergiesToBeEdited
                 .Select(x => x).Where(x => UserPacientsParams.pacientData.Allergies.Select(x => x.id).Contains(x.cd_allergy));
 
+            var nonExistingAllergiesToCreate = UserPacientsParams.pacientData.Allergies.Select(x => x)
+                .Where(x => !allergiesToBeEdited.Any(a => a.cd_allergy == x.id))
+                .Select(x => new Allergies(
+                    null,
+                    x.allergy,
+                    editedUser.pacientData!.cd_pacient!.Value
+                ))
+                .ToList();
+
+            var createdAllergies = await _allergiesRepository.AddMultiple(nonExistingAllergiesToCreate);
+
             foreach (var allergy in existingAllergiesToUpdate)
             {
                 var allergyToUpdate = UserPacientsParams.pacientData.Allergies.FirstOrDefault(a => a.id == allergy.cd_allergy);
@@ -174,7 +185,7 @@ namespace apihealthcareconnect.Controllers
 
             var editedAllergies = await _allergiesRepository.UpdateMultiple(existingAllergiesToUpdate.ToList());
 
-            editedUser.pacientData.Allergies = editedAllergies;
+            editedUser.pacientData.Allergies = editedAllergies.Concat(createdAllergies).ToList() ;
 
             //ALLERGY END-----------------------
 
