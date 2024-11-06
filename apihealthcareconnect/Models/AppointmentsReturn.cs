@@ -12,11 +12,11 @@ namespace apihealthcareconnect.Models
         [JsonPropertyName("id")]
         public int? cd_appointment_return { get; set; }
 
-        [JsonPropertyName("returnDate")]
+        [JsonPropertyName("appointmentDate")]
         public DateTime dt_return { get; set; }
 
-        [JsonPropertyName("ds_observation")]
-        public string? observation { get; set; }
+        [JsonPropertyName("observation")]
+        public string? ds_observation { get; set; }
 
         [JsonPropertyName("isActive")]
         public bool is_active { get; set; } = false;
@@ -34,11 +34,11 @@ namespace apihealthcareconnect.Models
         [ForeignKey("cd_appointment")]
         public Appointments appointment {  get; set; }
 
-        public AppointmentsReturn(int? cd_appointment_return, DateTime dt_return, string? observation, bool is_active, int cd_doctor, int cd_appointment)
+        public AppointmentsReturn(int? cd_appointment_return, DateTime dt_return, string? ds_observation, bool is_active, int cd_doctor, int cd_appointment)
         {
             this.cd_appointment_return = cd_appointment_return ?? null;
             this.dt_return = dt_return;
-            this.observation = observation;
+            this.ds_observation = ds_observation;
             this.is_active = is_active;
             this.cd_doctor = cd_doctor;
             this.cd_appointment = cd_appointment;

@@ -21,6 +21,8 @@ namespace apihealthcareconnect.Infraestrutura
         public DbSet<Doctors> Doctors { get; set; }
         public DbSet<Pacients> Pacients { get; set; }
         public DbSet<Allergies> Allergies { get; set; }
+        public DbSet<Appointments> Appointments { get; set; }
+        public DbSet<AppointmentsReturn> AppointmentsReturn { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

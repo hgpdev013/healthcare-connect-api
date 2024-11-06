@@ -14,7 +14,6 @@ namespace apihealthcareconnect
                 .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
-            // Add services to the container.
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllOrigins",
@@ -41,6 +40,8 @@ namespace apihealthcareconnect
             builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
             builder.Services.AddScoped<IPacientRepository, PacientRepository>();
             builder.Services.AddScoped<IAllergiesRepository, AllergiesRepository>();
+            builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+            builder.Services.AddScoped<IAppointmentsReturnRepository, AppointmentsReturnRepository>();
 
 
             builder.Services.AddEndpointsApiExplorer();
