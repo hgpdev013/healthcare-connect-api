@@ -12,6 +12,8 @@ namespace apihealthcareconnect.ViewModel.Reponses.Appointments
 
         public bool isActive { get; set; }
 
+        public string status { get; set; }
+
         public AppointmentsDoctorResponseViewModel doctorData { get; set; }
 
         public AppointmentsPacientResponseViewModel pacientData { get; set; }
@@ -22,6 +24,7 @@ namespace apihealthcareconnect.ViewModel.Reponses.Appointments
             DateTime appointmentDate,
             string? observation,
             bool isActive,
+            string status,
             AppointmentsDoctorResponseViewModel doctorData,
             AppointmentsPacientResponseViewModel pacientData,
             List<AppointmentReturnResponseViewModel> appointmentsReturn
@@ -31,6 +34,7 @@ namespace apihealthcareconnect.ViewModel.Reponses.Appointments
             this.appointmentDate = appointmentDate;
             this.observation = observation;
             this.isActive = isActive;
+            this.status = status;
             this.doctorData = doctorData;
             this.pacientData = pacientData;
             this.appointmentsReturn = appointmentsReturn;

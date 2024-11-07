@@ -10,14 +10,22 @@
 
         public bool isActive { get; set; }
 
+        public string status { get; set; }
+
         public AppointmentsDoctorResponseViewModel doctorData { get; set; }
 
-        public AppointmentReturnResponseViewModel(int id, DateTime appointmentDate, string? observation, bool isActive, AppointmentsDoctorResponseViewModel doctorData)
+        public AppointmentReturnResponseViewModel(int id,
+            DateTime appointmentDate,
+            string? observation,
+            bool isActive,
+            string status,
+            AppointmentsDoctorResponseViewModel doctorData)
         {
             this.id = id;
             this.appointmentDate = appointmentDate;
             this.observation = observation;
             this.isActive = isActive;
+            this.status = status;
             this.doctorData = doctorData;
         }
     }

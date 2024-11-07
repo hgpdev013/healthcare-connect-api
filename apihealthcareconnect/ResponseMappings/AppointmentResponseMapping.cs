@@ -12,6 +12,7 @@ namespace apihealthcareconnect.ResponseMappings
                     appointment.dt_appointment,
                     appointment.ds_observation,
                     appointment.is_active,
+                    GenerateAppointmentStatus(appointment.is_active, appointment.dt_appointment),
                     new AppointmentsDoctorResponseViewModel(
                         appointment.doctorData.cd_user!.Value,
                         appointment.doctorData.Users.nm_user,
@@ -33,6 +34,7 @@ namespace apihealthcareconnect.ResponseMappings
                         ar.dt_return,
                         ar.ds_observation,
                         ar.is_active,
+                        GenerateAppointmentStatus(ar.is_active, ar.dt_return),
                         new AppointmentsDoctorResponseViewModel(
                             ar.doctorData.cd_user!.Value,
                             ar.doctorData.Users.nm_user,
@@ -46,6 +48,18 @@ namespace apihealthcareconnect.ResponseMappings
                 );
 
             return mappedAppointment;
+        }
+
+        private string GenerateAppointmentStatus(bool isActive, DateTime appointmentDate)
+        {
+            if (!isActive)
+            {
+                return "Cancelada";
+            }
+            else
+            {
+                return DateTime.Now > appointmentDate ? "Concluída" : "Agendada";
+            }
         }
     }
 }
