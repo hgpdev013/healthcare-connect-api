@@ -19,11 +19,16 @@ namespace apihealthcareconnect.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(LoginResponseViewModel), 200)]
-        public async Task<IActionResult> PostLogin(LoginRequestViewModel LoginParams)
+        public async Task<IActionResult> PostLogin([FromHeader(Name = "typeOfApplication")] string typeOfApplication, LoginRequestViewModel LoginParams)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrEmpty(typeOfApplication) || !new HashSet<string> { "web", "mobile" }.Contains(typeOfApplication))
+            {
+                return BadRequest("typeOfApplication inválido.");
             }
 
             var userToLogin = await _usersRepository.GetByEmail(LoginParams.email);
@@ -43,6 +48,17 @@ namespace apihealthcareconnect.Controllers
             if (userToLogin.ds_email != LoginParams.email || !isPasswordValid)
             {
                 return BadRequest("E-mail ou senha inválidos.");
+            }
+
+
+            if (typeOfApplication == "web" && userToLogin?.userType?.cd_user_type == 2)
+            {
+                return Unauthorized("Você não possui permissão para acessar esse sistema.");
+            }
+
+            if (typeOfApplication == "mobile" && userToLogin?.userType?.cd_user_type != 2)
+            {
+                return Unauthorized("Você não possui permissão para acessar esse sistema.");
             }
 
             var response = new LoginResponseViewModel(
