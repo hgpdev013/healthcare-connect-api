@@ -9,5 +9,7 @@ namespace apihealthcareconnect.Interfaces
         Task<List<Users>> GetAllExceptMedicAndPatient(bool showAllUserTypes);
         Task<Users> GetById(int id);
         Task<List<Users>> GetByUserTypeId(int userTypeId);
+        Task<Users> GetByEmail(string email);
+
     }
 }

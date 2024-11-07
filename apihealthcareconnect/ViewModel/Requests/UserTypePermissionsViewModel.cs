@@ -20,5 +20,28 @@
         public bool canTakeExams { get; set; } = false;
 
         public bool canTakePrescription { get; set; } = false;
+
+        public UserTypePermissionsViewModel(int? id,
+            bool listOfDoctors,
+            bool listOfPatients,
+            bool listOfEmployees,
+            bool canEditInfoPatient,
+            bool canEditAllergiesPatient,
+            bool makeAppointment,
+            bool canEditObsAppointment,
+            bool canTakeExams,
+            bool canTakePrescription)
+        {
+            this.id = id;
+            this.listOfDoctors = listOfDoctors;
+            this.listOfPatients = listOfPatients;
+            this.listOfEmployees = listOfEmployees;
+            this.canEditInfoPatient = canEditInfoPatient;
+            this.canEditAllergiesPatient = canEditAllergiesPatient;
+            this.makeAppointment = makeAppointment;
+            this.canEditObsAppointment = canEditObsAppointment;
+            this.canTakeExams = canTakeExams;
+            this.canTakePrescription = canTakePrescription;
+        }
     }
 }

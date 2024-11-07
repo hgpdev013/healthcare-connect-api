@@ -55,5 +55,12 @@ namespace apihealthcareconnect.Repositories
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .ToListAsync();
         }
+
+        public async Task<Users> GetByEmail(string email)
+        {
+            return await _context.Users
+                .Include(i => i.userType).ThenInclude(i => i.permissions)
+                .FirstOrDefaultAsync(x => x.ds_email == email);
+        }
     }
 }
