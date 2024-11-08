@@ -28,7 +28,13 @@ namespace apihealthcareconnect.Infraestrutura
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_PRODUCTION");
+                string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_PRODUCTION");
+
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    connectionString = _configuration.GetConnectionString("HealthcareConnect");
+                }
+
                 optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             }
         }

@@ -30,10 +30,19 @@ namespace apihealthcareconnect
             });
 
             builder.Services.AddDbContext<ConnectionContext>(options =>
+            {
+                string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_PRODUCTION");
+
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    connectionString = builder.Configuration.GetConnectionString("HealthcareConnect");
+                }
+
                 options.UseMySql(
-                    Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_PRODUCTION"),
-                    ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_PRODUCTION"))
-                )
+                    connectionString,
+                    ServerVersion.AutoDetect(connectionString)
+                );
+            }
             );
 
             builder.Services.AddScoped<IUserTypeRepository, UserTypeRepository>();
