@@ -32,7 +32,6 @@ namespace apihealthcareconnect.Services
             var audiences = _configuration.GetSection("JwtSettings:Audiences").Get<string[]>();
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["JwtSettings:Issuer"],
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: creds
