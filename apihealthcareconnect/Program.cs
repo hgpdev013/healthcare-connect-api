@@ -1,8 +1,8 @@
-using apihealthcareconnect.Controllers;
 using apihealthcareconnect.Infraestrutura;
 using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Repositories;
 using apihealthcareconnect.ResponseMappings;
+using apihealthcareconnect.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -47,7 +47,8 @@ namespace apihealthcareconnect
             builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
             builder.Services.AddScoped<IAppointmentsReturnRepository, AppointmentsReturnRepository>();
             builder.Services.AddScoped<AppointmentResponseMapping>();
-            builder.Services.AddScoped<TokenGen>();
+            builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<EmailService>();
 
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 

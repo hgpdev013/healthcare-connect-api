@@ -1,4 +1,5 @@
 ﻿using apihealthcareconnect.Interfaces;
+using apihealthcareconnect.Services;
 using apihealthcareconnect.ViewModel.Reponses.Login;
 using apihealthcareconnect.ViewModel.Requests;
 using apihealthcareconnect.ViewModel.Requests.Login;
@@ -12,12 +13,14 @@ namespace apihealthcareconnect.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IUsersRepository _usersRepository;
-        private TokenGen _tokenGen;
+        private TokenService _tokenService;
+        private EmailService _emailService;
 
-        public LoginController(IUsersRepository usersRepository, TokenGen tokenGen)
+        public LoginController(IUsersRepository usersRepository, TokenService tokenService, EmailService emailService)
         {
             _usersRepository = usersRepository ?? throw new ArgumentNullException();
-            _tokenGen = tokenGen ?? throw new ArgumentNullException();
+            _tokenService = tokenService ?? throw new ArgumentNullException();
+            _emailService = emailService ?? throw new ArgumentNullException();
         }
 
         [HttpPost]
@@ -64,7 +67,7 @@ namespace apihealthcareconnect.Controllers
                 return Unauthorized("Você não possui permissão para acessar esse sistema.");
             }
 
-            var token = _tokenGen.GenerateJwtToken(userToLogin.cd_user.Value, userToLogin.ds_email, userToLogin.userType.ds_user_type);
+            var token = _tokenService.GenerateJwtToken(userToLogin.cd_user.Value, userToLogin.ds_email, userToLogin.userType.ds_user_type);
 
             var response = new LoginResponseViewModel(
                 userToLogin.cd_user!.Value,
@@ -93,6 +96,31 @@ namespace apihealthcareconnect.Controllers
             return Ok(response);
 
         }
+
+        [HttpPost("send-mail-to-reset")]
+        public async Task<IActionResult> PostSendMailToResetPassword(EmailToResetPasswordRequestViewModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _usersRepository.GetByEmail(request.email);
+
+            if (user == null)
+            {
+                return NotFound("E-mail inválido.");
+            }
+
+            var sendMailRequest = new SendEmailViewModel(user.ds_email,
+                "Redefinição de senha - Healthcare Connect",
+                "<h1>Teste email sending</h1>");
+
+            await _emailService.sendEmail(sendMailRequest);
+
+            return Ok("Email enviado com sucesso");
+        }
+
         [Authorize]
         [HttpPut("reset-password")]
         public async Task<IActionResult> PutPassword(ResetPasswordRequestViewModel resetPasswordParams)
@@ -115,7 +143,7 @@ namespace apihealthcareconnect.Controllers
                 return Unauthorized("Não autorizado.");
             }
 
-            var emailFromToken = _tokenGen.GetDataFromJwtToken(token, "email");
+            var emailFromToken = _tokenService.GetDataFromJwtToken(token, "email");
 
             if (emailFromToken == null)
             {

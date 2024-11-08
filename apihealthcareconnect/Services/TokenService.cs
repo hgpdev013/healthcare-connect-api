@@ -1,16 +1,16 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using apihealthcareconnect.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Xml.Linq;
 
-namespace apihealthcareconnect.Controllers
+namespace apihealthcareconnect.Services
 {
-    public class TokenGen
+    public class TokenService
     {
         private readonly IConfiguration _configuration;
 
-        public TokenGen(IConfiguration configuration)
+        public TokenService(IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException();
         }
@@ -19,8 +19,8 @@ namespace apihealthcareconnect.Controllers
         {
             var claims = new[]
             {
-                new Claim("email", email), 
-                new Claim("userId", userId.ToString()), 
+                new Claim("email", email),
+                new Claim("userId", userId.ToString()),
                 new Claim("userType", userType),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, DateTime.UtcNow.AddHours(1).ToString())
