@@ -1,10 +1,12 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
 using apihealthcareconnect.ViewModel.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apihealthcareconnect.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/generic-users")]
     public class UsersController : ControllerBase

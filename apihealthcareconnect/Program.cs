@@ -1,8 +1,12 @@
+using apihealthcareconnect.Controllers;
 using apihealthcareconnect.Infraestrutura;
 using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Repositories;
 using apihealthcareconnect.ResponseMappings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace apihealthcareconnect
 {
@@ -33,7 +37,6 @@ namespace apihealthcareconnect
                 )
             );
 
-            builder.Services.AddControllers();
             builder.Services.AddScoped<IUserTypeRepository, UserTypeRepository>();
             builder.Services.AddScoped<IUserTypePermissionsRepository, UserTypePermissionsRepository>();
             builder.Services.AddScoped<ISpecialtyTypeRepository, SpecialtyTypeRepository>();
@@ -44,10 +47,56 @@ namespace apihealthcareconnect
             builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
             builder.Services.AddScoped<IAppointmentsReturnRepository, AppointmentsReturnRepository>();
             builder.Services.AddScoped<AppointmentResponseMapping>();
+            builder.Services.AddScoped<TokenGen>();
 
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]))
+                };
+            });
+
+            builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "Insira o token JWT com o prefixo 'Bearer' em seu cabeçalho",
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
+                });
+
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+            });
+
 
             var app = builder.Build();
 
@@ -62,6 +111,7 @@ namespace apihealthcareconnect
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

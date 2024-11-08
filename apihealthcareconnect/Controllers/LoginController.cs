@@ -2,6 +2,7 @@
 using apihealthcareconnect.ViewModel.Reponses.Login;
 using apihealthcareconnect.ViewModel.Requests;
 using apihealthcareconnect.ViewModel.Requests.Login;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apihealthcareconnect.Controllers
@@ -11,10 +12,12 @@ namespace apihealthcareconnect.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IUsersRepository _usersRepository;
+        private TokenGen _tokenGen;
 
-        public LoginController(IUsersRepository usersRepository)
+        public LoginController(IUsersRepository usersRepository, TokenGen tokenGen)
         {
             _usersRepository = usersRepository ?? throw new ArgumentNullException();
+            _tokenGen = tokenGen ?? throw new ArgumentNullException();
         }
 
         [HttpPost]
@@ -61,6 +64,8 @@ namespace apihealthcareconnect.Controllers
                 return Unauthorized("Você não possui permissão para acessar esse sistema.");
             }
 
+            var token = _tokenGen.GenerateJwtToken(userToLogin.cd_user.Value, userToLogin.ds_email, userToLogin.userType.ds_user_type);
+
             var response = new LoginResponseViewModel(
                 userToLogin.cd_user!.Value,
                 userToLogin.nm_user,
@@ -82,34 +87,54 @@ namespace apihealthcareconnect.Controllers
                         userToLogin.userType.permissions.sg_take_prescriptions
                     )
                 ),
-                new TokenResponseViewModel("", 0)
+                new TokenResponseViewModel(token, 3600, DateTime.Now.AddMinutes(60))
             );
 
             return Ok(response);
 
         }
-
+        [Authorize]
         [HttpPut("reset-password")]
-        public async Task<IActionResult> PutPassword(LoginRequestViewModel LoginParams)
+        public async Task<IActionResult> PutPassword(ResetPasswordRequestViewModel resetPasswordParams)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var userToResetPassword = await _usersRepository.GetByEmail(LoginParams.email);
+            var authorizationHeader = Request.Headers["Authorization"].ToString();
+            var token = string.Empty;
+
+            if (authorizationHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                token = authorizationHeader.Substring("Bearer ".Length).Trim();
+            }
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return Unauthorized("Não autorizado.");
+            }
+
+            var emailFromToken = _tokenGen.GetDataFromJwtToken(token, "email");
+
+            if (emailFromToken == null)
+            {
+                return BadRequest("Email para redefinir senha não encontrado");
+            }
+
+            var userToResetPassword = await _usersRepository.GetByEmail(emailFromToken);
 
             if (userToResetPassword == null)
             {
                 return BadRequest("E-mail ou senha inválidos");
             }
 
-            if (userToResetPassword.ds_email != LoginParams.email)
+            if (userToResetPassword.ds_email != emailFromToken)
             {
                 return BadRequest("E-mail inválido.");
             }
 
-            userToResetPassword.ds_password = BCrypt.Net.BCrypt.HashPassword(LoginParams.password);
+            userToResetPassword.ds_password = BCrypt.Net.BCrypt.HashPassword(resetPasswordParams.newPassword);
 
             var userEdited = await _usersRepository.Update(userToResetPassword);
 

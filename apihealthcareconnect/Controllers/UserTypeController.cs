@@ -1,12 +1,12 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
-using apihealthcareconnect.Repositories;
 using apihealthcareconnect.ViewModel.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Numerics;
 
 namespace apihealthcareconnect.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/user-types")]
     public class UserTypeController : ControllerBase

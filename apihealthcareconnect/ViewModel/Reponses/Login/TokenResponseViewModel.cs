@@ -4,12 +4,15 @@
     {
         public string token { get; set; }
 
-        public int expiresIn { get; set; }
+        public int expiresInSeconds { get; set; }
 
-        public TokenResponseViewModel(string token, int expiresIn)
+        public DateTime expireDate { get; set; }
+
+        public TokenResponseViewModel(string token, int expiresInSeconds, DateTime expireDate)
         {
             this.token = token;
-            this.expiresIn = expiresIn;
+            this.expiresInSeconds = expiresInSeconds;
+            this.expireDate = expireDate;
         }
     }
 }

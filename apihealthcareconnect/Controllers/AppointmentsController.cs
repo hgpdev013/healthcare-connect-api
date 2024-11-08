@@ -3,9 +3,11 @@ using apihealthcareconnect.Models;
 using apihealthcareconnect.ViewModel.Reponses.Appointments;
 using apihealthcareconnect.ResponseMappings;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace apihealthcareconnect.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/appointments")]
     public class AppointmentsController : ControllerBase
