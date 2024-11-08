@@ -15,7 +15,6 @@ namespace apihealthcareconnect
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Configuration
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
@@ -32,8 +31,8 @@ namespace apihealthcareconnect
 
             builder.Services.AddDbContext<ConnectionContext>(options =>
                 options.UseMySql(
-                    builder.Configuration.GetConnectionString("HealthcareConnect"),
-                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("HealthcareConnect"))
+                    Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_PRODUCTION"),
+                    ServerVersion.AutoDetect(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING_PRODUCTION"))
                 )
             );
 
