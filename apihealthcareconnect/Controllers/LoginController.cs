@@ -90,7 +90,7 @@ namespace apihealthcareconnect.Controllers
                         userToLogin.userType.permissions.sg_take_prescriptions
                     )
                 ),
-                new TokenResponseViewModel(token, 3600, DateTime.Now.AddMinutes(60))
+                new TokenResponseViewModel(token, 3600 * 9, DateTime.Now.AddHours(9))
             );
 
             return Ok(response);
