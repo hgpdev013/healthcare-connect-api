@@ -1,4 +1,5 @@
 ﻿using apihealthcareconnect.Models;
+using apihealthcareconnect.ViewModel;
 using apihealthcareconnect.ViewModel.Reponses.Appointments;
 
 namespace apihealthcareconnect.ResponseMappings
@@ -19,7 +20,9 @@ namespace apihealthcareconnect.ResponseMappings
                         appointment.doctorData.cd_crm,
                         new AppointmentsSpecialtyTypeResponseViewModel(
                             appointment.doctorData.specialtyType.cd_specialty_type!.Value,
-                            appointment.doctorData.specialtyType.ds_specialty_type
+                            appointment.doctorData.specialtyType.ds_specialty_type,
+                            appointment.doctorData.specialtyType.dt_interval_between_appointments,
+                            appointment.doctorData.specialtyType.is_active
                         )
                     ),
                     new AppointmentsPacientResponseViewModel(
@@ -41,10 +44,33 @@ namespace apihealthcareconnect.ResponseMappings
                             ar.doctorData.cd_crm,
                             new AppointmentsSpecialtyTypeResponseViewModel(
                                 ar.doctorData.specialtyType.cd_specialty_type!.Value,
-                                ar.doctorData.specialtyType.ds_specialty_type
+                                ar.doctorData.specialtyType.ds_specialty_type,
+                                ar.doctorData.specialtyType.dt_interval_between_appointments,
+                                ar.doctorData.specialtyType.is_active
                             )
                         )
                     )).ToList()
+                );
+
+            return mappedAppointment;
+        }
+
+        public AppointmentsUnavailableTimesResponseViewModel mapUnavailableTimes(Appointments appointment, List<TimeOnly> unavailableTimes)
+        {
+            var mappedUnavailableTimes = unavailableTimes
+            .Select(time => time.ToString("HH:mm"))
+            .ToList();
+
+            var mappedAppointment = new AppointmentsUnavailableTimesResponseViewModel(
+                appointment.doctorData.Users.cd_user!.Value,
+                appointment.doctorData.Users.nm_user,
+                new AppointmentsSpecialtyTypeResponseViewModel(
+                    appointment.doctorData.specialtyType.cd_specialty_type!.Value,
+                    appointment.doctorData.specialtyType.ds_specialty_type,
+                    appointment.doctorData.specialtyType.dt_interval_between_appointments,
+                    appointment.doctorData.specialtyType.is_active
+                ),
+                mappedUnavailableTimes
                 );
 
             return mappedAppointment;

@@ -9,5 +9,13 @@
         public string intervalBetweenAppointments { get; set; }
 
         public bool isActive { get; set; }
+
+        public SpecialtyTypeViewModel(int id, string description, string intervalBetweenAppointments, bool isActive)
+        {
+            this.id = id;
+            this.description = description;
+            this.intervalBetweenAppointments = intervalBetweenAppointments;
+            this.isActive = isActive;
+        }
     }
 }

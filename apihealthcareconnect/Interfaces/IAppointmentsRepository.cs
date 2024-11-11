@@ -8,6 +8,8 @@ namespace apihealthcareconnect.Interfaces
 
         Task<Appointments> GetById(int id);
 
+        Task<List<Appointments>> GetUnavailableTimes(int doctorId, DateTime date);
+
         Task<Appointments> Add(Appointments appointments);
 
         Task<Appointments> Update(Appointments appointments);

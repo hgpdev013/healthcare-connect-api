@@ -49,6 +49,18 @@ namespace apihealthcareconnect.Repositories
                 .FirstOrDefaultAsync(x => x.cd_appointment == id);
         }
 
+        public async Task<List<Appointments>> GetUnavailableTimes(int doctorId, DateTime date)
+        {
+            return await _context.Appointments
+                .Include(i => i.appointmentsReturn)
+                .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                 .Where(x => x.dt_appointment >= date.Date && x.dt_appointment < date.Date.AddDays(1))
+                .Where(x => x.cd_doctor == doctorId)
+                .ToListAsync();
+
+        }
+
         public async Task<Appointments> Add(Appointments appointments)
         {
             throw new NotImplementedException();
