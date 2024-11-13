@@ -67,7 +67,7 @@ namespace apihealthcareconnect.Controllers
                 return Unauthorized("Você não possui permissão para acessar esse sistema.");
             }
 
-            var token = _tokenService.GenerateJwtToken(userToLogin.cd_user.Value, userToLogin.ds_email, userToLogin.userType.ds_user_type);
+            var token = _tokenService.GenerateJwtToken(userToLogin.cd_user.Value, userToLogin.ds_email, userToLogin.userType.ds_user_type, DateTime.Now.AddHours(9));
 
             var response = new LoginResponseViewModel(
                 userToLogin.cd_user!.Value,
@@ -107,6 +107,8 @@ namespace apihealthcareconnect.Controllers
 
             var user = await _usersRepository.GetByEmail(request.email);
 
+            var token = _tokenService.GenerateJwtToken(user.cd_user.Value, user.ds_email, user.userType.ds_user_type, DateTime.Now.AddMinutes(5));
+
             if (user == null)
             {
                 return NotFound("E-mail inválido.");
@@ -114,7 +116,80 @@ namespace apihealthcareconnect.Controllers
 
             var sendMailRequest = new SendEmailViewModel(user.ds_email,
                 "Redefinição de senha - Healthcare Connect",
-                "<h1>Teste email sending</h1>");
+                "<!DOCTYPE html>" +
+                "<html lang=\"pt-BR\">" +
+                "<head>" +
+                    "<meta charset=\"UTF-8\">" +
+                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+                    "<title>Redefinição de Senha - Healthcare Connect</title>" +
+                    "<style>" +
+                        "body {" +
+                            "font-family: Arial, sans-serif;" +
+                            "background-color: #f7f7f7;" +
+                            "margin: 0;" +
+                            "padding: 0;" +
+                            "color: #333333;" +
+                        "}" +
+                        ".container {" +
+                            "width: 100%;" +
+                            "max-width: 600px;" +
+                            "margin: 0 auto;" +
+                            "background-color: #ffffff;" +
+                            "padding: 20px;" +
+                            "border-radius: 8px;" +
+                            "box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);" +
+                        "}" +
+                        ".header {" +
+                            "text-align: center;" +
+                            "padding: 10px 0;" +
+                        "}" +
+                        ".header h1 {" +
+                            "color: #4CAF50;" +
+                            "margin: 0;" +
+                        "}" +
+                        ".content {" +
+                            "padding: 20px;" +
+                            "line-height: 1.6;" +
+                        "}" +
+                        ".button {" +
+                            "display: inline-block;" +
+                            "padding: 10px 20px;" +
+                            "color: #ffffff;" +
+                            "background-color: #4CAF50;" +
+                            "text-decoration: none;" +
+                            "border-radius: 5px;" +
+                            "margin-top: 20px;" +
+                            "text-align: center;" +
+                        "}" +
+                        ".footer {" +
+                            "text-align: center;" +
+                            "font-size: 12px;" +
+                            "color: #777777;" +
+                            "padding: 10px 0;" +
+                            "border-top: 1px solid #eeeeee;" +
+                            "margin-top: 20px;" +
+                        "}" +
+                    "</style>" +
+                "</head>" +
+                "<body>" +
+                    "<div class=\"container\">" +
+                        "<div class=\"header\">" +
+                            "<h1>Redefinição de Senha</h1>" +
+                        "</div>" +
+                        "<div class=\"content\">" +
+                            "<p>Olá,</p>" +
+                            "<p>Recebemos uma solicitação para redefinir sua senha no <strong>Healthcare Connect</strong>. Para redefinir sua senha, clique no botão abaixo:</p>" +
+                            $"<p><a href=\"https://www.healthcareconnect.com.br/login/esqueceuSenha?token={token}\" class=\"button\">Redefinir Senha</a></p>" +
+                            "<p>Se você não solicitou essa alteração, desconsidere este e-mail. Sua senha permanecerá a mesma e nenhuma ação adicional será necessária.</p>" +
+                            "<p>Atenciosamente,<br>Equipe Healthcare Connect</p>" +
+                        "</div>" +
+                        "<div class=\"footer\">" +
+                            "<p>Healthcare Connect &copy; 2024</p>" +
+                            "<p>Este é um e-mail automático. Por favor, não responda.</p>" +
+                        "</div>" +
+                    "</div>" +
+                "</body>" +
+                "</html>");
 
             await _emailService.sendEmail(sendMailRequest);
 

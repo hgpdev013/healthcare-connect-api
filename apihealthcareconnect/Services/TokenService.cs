@@ -1,5 +1,7 @@
 ﻿using apihealthcareconnect.Interfaces;
+using apihealthcareconnect.ViewModel.Reponses.Login;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,7 +17,7 @@ namespace apihealthcareconnect.Services
             _configuration = configuration ?? throw new ArgumentNullException();
         }
 
-        public string GenerateJwtToken(int userId, string email, string userType)
+        public string GenerateJwtToken(int userId, string email, string userType, DateTime expires)
         {
             var claims = new[]
             {
@@ -33,7 +35,7 @@ namespace apihealthcareconnect.Services
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddHours(9),
+                expires: expires,
                 signingCredentials: creds
             );
 

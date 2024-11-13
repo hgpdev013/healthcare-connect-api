@@ -3,8 +3,6 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
-using System.Configuration;
-using System.Xml.Linq;
 
 namespace apihealthcareconnect.Services
 {
@@ -18,7 +16,7 @@ namespace apihealthcareconnect.Services
 
         public async Task sendEmail(SendEmailViewModel request)
         {
-            var smtpDataCovered = _configuration?.GetSection("SmtpData");
+             var smtpDataCovered = _configuration?.GetSection("SmtpData");
             var sender = smtpDataCovered["EmailSender"];
             var password = smtpDataCovered["EmailPassword"];
             var server = smtpDataCovered["Server"];
@@ -30,11 +28,9 @@ namespace apihealthcareconnect.Services
             email.Body = new TextPart(TextFormat.Html) { Text = request.body };
 
 
-            
-
             using var smtp = new SmtpClient();
             await smtp.ConnectAsync(server, 587, SecureSocketOptions.StartTls);
-            await smtp.AuthenticateAsync(sender, password);
+            await smtp.AuthenticateAsync("resend", password);
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
         }
