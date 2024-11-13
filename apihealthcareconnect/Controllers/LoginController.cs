@@ -126,9 +126,10 @@ namespace apihealthcareconnect.Controllers
                         "body {" +
                             "font-family: Arial, sans-serif;" +
                             "background-color: #f7f7f7;" +
-                            "margin: 0;" +
+                            "margin: 20px;" +
                             "padding: 0;" +
                             "color: #333333;" +
+                            "border-radius: 8px" +
                         "}" +
                         ".container {" +
                             "width: 100%;" +
@@ -144,7 +145,7 @@ namespace apihealthcareconnect.Controllers
                             "padding: 10px 0;" +
                         "}" +
                         ".header h1 {" +
-                            "color: #4CAF50;" +
+                            "color: #307ac1;" +
                             "margin: 0;" +
                         "}" +
                         ".content {" +
@@ -155,7 +156,7 @@ namespace apihealthcareconnect.Controllers
                             "display: inline-block;" +
                             "padding: 10px 20px;" +
                             "color: #ffffff;" +
-                            "background-color: #4CAF50;" +
+                            "background-color: #307ac1;" +
                             "text-decoration: none;" +
                             "border-radius: 5px;" +
                             "margin-top: 20px;" +
