@@ -6,7 +6,7 @@
 
         public string doctorName { get; set; }
 
-        AppointmentsSpecialtyTypeResponseViewModel specialtyType { get; set; }
+        public AppointmentsSpecialtyTypeResponseViewModel specialtyType { get; set; }
 
         public List<string> unavailableTimes { get; set; }
 
