@@ -30,6 +30,11 @@ namespace apihealthcareconnect.ResponseMappings
                         appointment.pacientData.Users.nm_user,
                         appointment.pacientData.Users.ds_email,
                         appointment.pacientData.Users.ds_cellphone,
+                        appointment.pacientData.Users.dt_birth,
+                        appointment.pacientData.Users.cd_cpf,
+                        appointment.pacientData.Users.cd_identification,
+                        appointment.pacientData.Users.is_active,
+                        appointment.pacientData.Users.ds_gender,
                         appointment.pacientData.Allergies.Select(x => new AppointmentsAllergyResponseViewModel(x.cd_allergy!.Value, x.nm_allergy)).ToList()
                     ),
                     appointment.appointmentsReturn.Select(ar => new AppointmentReturnResponseViewModel(
