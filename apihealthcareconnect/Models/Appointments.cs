@@ -8,22 +8,16 @@ namespace apihealthcareconnect.Models
     public class Appointments
     {
         [Key]
-        [JsonPropertyName("id")]
         public int? cd_appointment { get; set; }
 
-        [JsonPropertyName("appointmentDate")]
         public DateTime dt_appointment { get; set; }
 
-        [JsonPropertyName("observation")]
         public string? ds_observation { get; set; }
 
-        [JsonPropertyName("isActive")]
         public bool is_active { get; set; } = false;
 
-        [JsonIgnore]
         public int cd_pacient { get; set; }
 
-        [JsonIgnore]
         public int cd_doctor { get; set; }
 
         [ForeignKey("cd_pacient")]

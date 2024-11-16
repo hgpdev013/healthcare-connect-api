@@ -9,41 +9,29 @@ namespace apihealthcareconnect.Models
     public class UserTypePermissions
     {
         [Key]
-        [JsonPropertyName("id")]
         public int? cd_user_type_permission { get; set; }
 
-        [JsonPropertyName("listOfDoctors")]
         public bool sg_doctors_list { get; set; }
 
-        [JsonPropertyName("listOfPatients")]
         public bool sg_pacients_list { get; set; }
 
-        [JsonPropertyName("listOfEmployees")]
         public bool sg_employees_list { get; set; }
 
-        [JsonPropertyName("canEditInfoPatient")]
         public bool sg_patients_edit { get; set; }
 
-        [JsonPropertyName("canEditAllergiesPatient")]
         public bool sg_patients_allergy_edit { get; set; }
 
-        [JsonPropertyName("makeAppointment")]
         public bool sg_appointment_create { get; set; }
 
-        [JsonPropertyName("canEditObsAppointment")]
         public bool sg_edit_appointmente_obs { get; set; }
 
-        [JsonPropertyName("canTakeExams")]
         public bool sg_take_exams { get; set; }
 
-        [JsonPropertyName("canTakePrescription")]
         public bool sg_take_prescriptions { get; set; }
 
-        [JsonIgnore]
         public int cd_user_type { get; set; }
 
         [ForeignKey("cd_user_type")]
-        [JsonIgnore]
         public UserType? UserType { get; set; }
 
 

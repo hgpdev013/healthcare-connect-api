@@ -1,5 +1,7 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
+using apihealthcareconnect.ResponseMappings;
+using apihealthcareconnect.ViewModel.Reponses.User;
 using apihealthcareconnect.ViewModel.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,39 +14,58 @@ namespace apihealthcareconnect.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersRepository _usersRepository;
+        private readonly UserResponseMapping _userResponseMapping;
 
-        public UsersController(IUsersRepository usersRepository)
+        public UsersController(IUsersRepository usersRepository, UserResponseMapping userResponseMapping)
         {
             _usersRepository = usersRepository ?? throw new ArgumentNullException();
+            _userResponseMapping = userResponseMapping ?? throw new ArgumentNullException();
         }
 
         [HttpGet("only-general-employees")]
-        [ProducesResponseType(typeof(List<Users>), 200)]
+        [ProducesResponseType(typeof(List<UserResponse>), 200)]
         public async Task<IActionResult> GetUsers(bool? showAllUserTypes)
         {
             var users = await _usersRepository.GetAllExceptMedicAndPatient(showAllUserTypes ?? false);
-            return Ok(users);
+
+            var usersFormatted = users.Select(u => _userResponseMapping.MapGenericUser(
+                    true,
+                    u
+                )
+            ).ToList();
+
+            return Ok(usersFormatted);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Users), 200)]
+        [ProducesResponseType(typeof(UserResponse), 200)]
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _usersRepository.GetById(id);
-            return Ok(user);
+
+            var userFormatted = _userResponseMapping.MapGenericUser(false, user);
+
+            return Ok(userFormatted);
         }
 
 
         [HttpGet("by-user-type/{userTypeId}")]
-        [ProducesResponseType(typeof(List<Users>), 200)]
+        [ProducesResponseType(typeof(List<UserResponse>), 200)]
         public async Task<IActionResult> GetUsersByUserType(int userTypeId)
         {
             var users = await _usersRepository.GetByUserTypeId(userTypeId);
-            return Ok(users);
+
+            var usersFormatted = users.Select(u => _userResponseMapping.MapGenericUser(
+                    true,
+                    u
+                )
+            ).ToList();
+
+            return Ok(usersFormatted);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Users), 201)]
+        [ProducesResponseType(typeof(UserResponse), 201)]
         public async Task<IActionResult> PostUsers(UsersViewModel UserParams)
         {
             if (!ModelState.IsValid)
@@ -79,11 +100,13 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("Erro ao cadastrar usuário");
             }
 
-            return Ok(user);
+            var userFormatted = _userResponseMapping.MapGenericUser(false, user);
+
+            return Ok(userFormatted);
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(Users), 204)]
+        [ProducesResponseType(typeof(UserResponse), 204)]
         public async Task<IActionResult> PutUsers(UsersViewModel UserParams)
         {
             if (!ModelState.IsValid)
@@ -119,7 +142,9 @@ namespace apihealthcareconnect.Controllers
 
             var editedUser = await _usersRepository.Update(userToBeEdited);
 
-            return Ok(editedUser);
+            var userFormmated = _userResponseMapping.MapGenericUser(false,editedUser);
+
+            return Ok(userFormmated);
         }
 
         [HttpPatch("{id}/user-photo")]
@@ -142,7 +167,6 @@ namespace apihealthcareconnect.Controllers
 
             try
             {
-                // Lê os dados binários da foto
                 using (var memoryStream = new MemoryStream())
                 {
                     await photo.CopyToAsync(memoryStream);

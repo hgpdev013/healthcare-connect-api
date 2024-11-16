@@ -1,8 +1,11 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
+using apihealthcareconnect.ResponseMappings;
+using apihealthcareconnect.ViewModel.Reponses.User;
 using apihealthcareconnect.ViewModel.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg;
 
 namespace apihealthcareconnect.Controllers
 {
@@ -14,27 +17,33 @@ namespace apihealthcareconnect.Controllers
         private readonly IPacientRepository _pacientRepository;
         private readonly IUsersRepository _usersRepository;
         private readonly IAllergiesRepository _allergiesRepository;
+        private readonly UserResponseMapping _userResponseMapping;
 
         public PacientsController(IPacientRepository pacientRepository,
             IUsersRepository usersRepository,
-            IAllergiesRepository allergiesRepository)
+            IAllergiesRepository allergiesRepository,
+            UserResponseMapping userResponseMapping)
         {
             _pacientRepository = pacientRepository ?? throw new ArgumentNullException();
             _usersRepository = usersRepository ?? throw new ArgumentNullException();
             _allergiesRepository = allergiesRepository ?? throw new ArgumentNullException();
+            _userResponseMapping = userResponseMapping ?? throw new ArgumentNullException();
         }
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<Users>), 200)]
+        [ProducesResponseType(typeof(List<UserResponse>), 200)]
         public async Task<IActionResult> GetPacients()
         {
             var pacients = await _usersRepository.GetByUserTypeId(2);
-            return Ok(pacients);
+
+            var pacientsFormatted = pacients.Select(p => _userResponseMapping.MapGenericUser(true, p)).ToList();
+
+            return Ok(pacientsFormatted);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Users), 200)]
+        [ProducesResponseType(typeof(UserResponse), 200)]
         public async Task<IActionResult> GetPacientById(int id)
         {
             var pacient = await _usersRepository.GetById(id);
@@ -44,12 +53,14 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("Usuário não é do tipo paciente.");
             }
 
-            return Ok(pacient);
+            var pacientFormmated = _userResponseMapping.MapGenericUser(false, pacient);
+
+            return Ok(pacientFormmated);
 
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Users), 201)]
+        [ProducesResponseType(typeof(UserResponse), 201)]
         public async Task<IActionResult> PostPacient(UsersPacientsRequestViewModel UserPacientsParams)
         {
             if (!ModelState.IsValid)
@@ -110,11 +121,13 @@ namespace apihealthcareconnect.Controllers
             createdUser.pacientData.cd_pacient = createdPacient.cd_pacient;
             createdUser.pacientData.Allergies = createdMultipleAllergies;
 
-            return Ok(createdUser);
+            var createdPacientFormmated = _userResponseMapping.MapGenericUser(false, createdUser);
+
+            return Ok(createdPacientFormmated);
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(Users), 200)]
+        [ProducesResponseType(typeof(UserResponse), 200)]
         public async Task<IActionResult> PutPacient(UsersPacientsRequestViewModel UserPacientsParams)
         {
             if (!ModelState.IsValid)
@@ -190,9 +203,12 @@ namespace apihealthcareconnect.Controllers
 
             editedUser.pacientData.Allergies = editedAllergies.Concat(createdAllergies).ToList() ;
 
+
             //ALLERGY END-----------------------
 
-           return Ok(editedUser);
+            var editedUserFormmated = _userResponseMapping.MapGenericUser(false, editedUser);
+
+            return Ok(editedUserFormmated);
         }
     }
 }

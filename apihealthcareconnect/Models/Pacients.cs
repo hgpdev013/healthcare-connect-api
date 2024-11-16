@@ -8,13 +8,10 @@ namespace apihealthcareconnect.Models
     public class Pacients
     {
         [Key]
-        [JsonIgnore]
         public int? cd_pacient { get; set; }
 
-        [JsonPropertyName("userId")]
         public int cd_user { get; set; }
 
-        [JsonIgnore]
         [ForeignKey("cd_user")]
         public Users Users { get; set; }
 

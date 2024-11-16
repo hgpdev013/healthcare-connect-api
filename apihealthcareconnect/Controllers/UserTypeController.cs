@@ -1,5 +1,6 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
+using apihealthcareconnect.ResponseMappings;
 using apihealthcareconnect.ViewModel.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,37 +14,47 @@ namespace apihealthcareconnect.Controllers
     {
         private readonly IUserTypeRepository _userTypeRepository;
         private readonly IUserTypePermissionsRepository _userTypePermissionsRepository;
+        private readonly UserResponseMapping _userResponseMapping;
 
         public UserTypeController(IUserTypeRepository userTypeRepository,
-            IUserTypePermissionsRepository userTypePermissionsRepository)
+            IUserTypePermissionsRepository userTypePermissionsRepository,
+            UserResponseMapping userResponseMapping)
         {
             _userTypeRepository = userTypeRepository ?? throw new ArgumentNullException();
             _userTypePermissionsRepository = userTypePermissionsRepository ?? throw new ArgumentNullException();
+            _userResponseMapping = userResponseMapping ?? throw new ArgumentNullException();
         }
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<UserType>), 200)]
+        [ProducesResponseType(typeof(List<UserTypeViewModel>), 200)]
         public async Task<IActionResult> GetUserTypes()
         {
             var userTypes = await _userTypeRepository.GetAll();
-            return Ok(userTypes);
+
+            var userTypesFormatted = userTypes.Select(u => _userResponseMapping.MapUserType(u));
+
+            return Ok(userTypesFormatted);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(UserType), 200)]
+        [ProducesResponseType(typeof(UserTypeViewModel), 200)]
         public async Task<IActionResult> GetSpecialtyById(int id)
         {
             var userTypeById = await _userTypeRepository.GetById(id);
+
             if (userTypeById == null)
             {
                 return NotFound("Tipo de usuário não encontrado");
             }
-            return Ok(userTypeById);
+
+            var userFormatted = _userResponseMapping.MapUserType(userTypeById);
+
+            return Ok(userFormatted);
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(UserType), 201)]
+        [ProducesResponseType(typeof(UserTypeViewModel), 201)]
         public async Task<IActionResult> PostUserType(UserTypeViewModel userTypeParams)
         {
             if (!ModelState.IsValid)
@@ -79,19 +90,21 @@ namespace apihealthcareconnect.Controllers
             }
             createdUserType.permissions =
                 new UserTypePermissions(createdPermissions.cd_user_type_permission,
-                createdPermissions.sg_doctors_list,
-                createdPermissions.sg_pacients_list,
-                createdPermissions.sg_employees_list,
-                createdPermissions.sg_patients_edit,
-                createdPermissions.sg_patients_allergy_edit,
-                createdPermissions.sg_appointment_create,
-                createdPermissions.sg_edit_appointmente_obs,
-                createdPermissions.sg_take_exams,
-                createdPermissions.sg_take_prescriptions,
-                createdPermissions.cd_user_type
+                    createdPermissions.sg_doctors_list,
+                    createdPermissions.sg_pacients_list,
+                    createdPermissions.sg_employees_list,
+                    createdPermissions.sg_patients_edit,
+                    createdPermissions.sg_patients_allergy_edit,
+                    createdPermissions.sg_appointment_create,
+                    createdPermissions.sg_edit_appointmente_obs,
+                    createdPermissions.sg_take_exams,
+                    createdPermissions.sg_take_prescriptions,
+                    createdPermissions.cd_user_type
                 );
 
-            return Ok(createdUserType);
+            var createdUserTypeFormatted = _userResponseMapping.MapUserType(createdUserType);
+
+            return Ok(createdUserTypeFormatted);
         }
 
         [HttpPut]
@@ -138,7 +151,9 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("Não foi possível atualizar as permissões do tipo de usuário");
             }
 
-            return Ok(updatedUserType);
+            var updatedUserTypeFormatted = _userResponseMapping.MapUserType(updatedUserType);
+
+            return Ok(updatedUserTypeFormatted);
         }
     }
 }

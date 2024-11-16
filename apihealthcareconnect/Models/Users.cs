@@ -8,62 +8,42 @@ namespace apihealthcareconnect.Models
     public class Users
     {
         [Key]
-        [JsonPropertyName("id")]
         public int? cd_user { get; set; }
 
-        [JsonPropertyName("cpf")]
         public string cd_cpf { get; set; }
 
-        [JsonPropertyName("documentNumber")]
         public string cd_identification { get; set; }
 
-        [JsonPropertyName("name")]
         public string nm_user { get; set; }
 
-        [JsonPropertyName("dateOfBirth")]
         public DateTime dt_birth { get; set; }
 
-        [JsonPropertyName("email")]
         public string ds_email { get; set; }
 
-        [JsonPropertyName("cellphone")]
         public string ds_cellphone { get; set; }
 
-        [JsonPropertyName("login")]
         public string ds_login { get; set; }
 
-        [JsonPropertyName("streetName")]
         public string? nm_street { get; set; }
 
-        [JsonPropertyName("streetNumber")]
         public int? cd_street_number { get; set; }
 
-        [JsonPropertyName("complement")]
         public string? ds_complement { get; set; }
 
-        [JsonPropertyName("neighborhood")]
         public string? ds_neighborhood { get; set; }
 
-        [JsonPropertyName("stateName")]
         public string? nm_state { get; set; }
 
-        [JsonPropertyName("cep")]
         public string? cd_cep { get; set; }
 
-        [JsonPropertyName("city")]
         public string? nm_city {  get; set; }
 
-        [JsonPropertyName("gender")]
         public string? ds_gender {  get; set; }
 
-        [JsonPropertyName("isActive")]
         public bool is_active { get; set; }
 
-        [JsonIgnore]
         public string? ds_password { get; set; }
 
-        [JsonIgnore]
-        [JsonPropertyName("userTypeId")]
         public int cd_user_type { get; set; }
 
         public Doctors? doctorData { get; set; }

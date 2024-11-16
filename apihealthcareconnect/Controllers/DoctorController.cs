@@ -1,8 +1,11 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
+using apihealthcareconnect.ResponseMappings;
+using apihealthcareconnect.ViewModel.Reponses.User;
 using apihealthcareconnect.ViewModel.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 
 namespace apihealthcareconnect.Controllers
 {
@@ -13,24 +16,29 @@ namespace apihealthcareconnect.Controllers
     {
         private readonly IDoctorRepository _doctorRepository;
         private readonly IUsersRepository _usersRepository;
+        private UserResponseMapping _userResponseMapping;
 
-        public DoctorController(IDoctorRepository doctorRepository, IUsersRepository usersRepository)
+        public DoctorController(IDoctorRepository doctorRepository, IUsersRepository usersRepository, UserResponseMapping userResponseMapping)
         {
             _doctorRepository = doctorRepository ?? throw new ArgumentNullException();
             _usersRepository = usersRepository ?? throw new ArgumentNullException();
+            _userResponseMapping = userResponseMapping ?? throw new ArgumentNullException();
         }
 
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<Users>), 200)]
+        [ProducesResponseType(typeof(List<UserResponse>), 200)]
         public async Task<IActionResult> GetDoctors()
         {
             var doctors = await _usersRepository.GetByUserTypeId(1);
-            return Ok(doctors);
+
+            var doctorsFormatted = doctors.Select(d => _userResponseMapping.MapGenericUser(true, d)).ToList();
+
+            return Ok(doctorsFormatted);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Users), 200)]
+        [ProducesResponseType(typeof(UserResponse), 200)]
         public async Task<IActionResult> GetDoctorById(int id)
         {
             var doctor = await _usersRepository.GetById(id);
@@ -40,10 +48,13 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("Usuário não é médico");
             }
 
-            return Ok(doctor);
+            var doctorFormatted = _userResponseMapping.MapGenericUser(false, doctor);
+
+            return Ok(doctorFormatted);
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(UserResponse), 200)]
         public async Task<IActionResult> PostDoctors(UsersDoctorsRequestViewModel UserDoctorsParams)
         {
             if (!ModelState.IsValid)
@@ -93,10 +104,13 @@ namespace apihealthcareconnect.Controllers
 
             createdUser.doctorData = createdDoctor;
 
-            return Ok(createdUser);
+            var createdDoctorFormatted = _userResponseMapping.MapGenericUser(false, createdUser);
+
+            return Ok(createdDoctorFormatted);
         }
 
         [HttpPut]
+        [ProducesResponseType(typeof(UserResponse), 200)]
         public async Task<IActionResult> PutDoctors(UsersDoctorsRequestViewModel UserDoctorsParams)
         {
             if (!ModelState.IsValid)
@@ -145,7 +159,9 @@ namespace apihealthcareconnect.Controllers
 
             var editedDoctor = await _doctorRepository.Update(editedUser.doctorData);
 
-            return Ok(editedUser);
+            var editedDoctorFormatted = _userResponseMapping.MapGenericUser(false, editedUser);
+
+            return Ok(editedDoctorFormatted);
         }
     }
 }

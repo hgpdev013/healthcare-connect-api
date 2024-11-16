@@ -8,25 +8,19 @@ namespace apihealthcareconnect.Models
     public class Doctors
     {
         [Key]
-        [JsonIgnore]
         public int cd_doctor {  get; set; }
 
-        [JsonPropertyName("crm")]
         public string? cd_crm { get; set; }
 
-        [JsonPropertyName("userId")]
         public int? cd_user { get; set; }
 
-        [JsonIgnore]
         public int? cd_specialty_type { get; set; }
 
-        [JsonPropertyName("observation")]
         public string? ds_observation { get; set; }
 
         [ForeignKey("cd_specialty_type")]
         public SpecialtyType specialtyType { get; set; } = null!;
 
-        [JsonIgnore]
         [ForeignKey("cd_user")]
         public Users Users { get; set; }
 

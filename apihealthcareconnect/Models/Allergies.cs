@@ -8,16 +8,12 @@ namespace apihealthcareconnect.Models
     public class Allergies
     {
         [Key]
-        [JsonPropertyName("id")]
         public int? cd_allergy { get; set; }
 
-        [JsonPropertyName("allergy")]
         public string nm_allergy { get; set; }
 
-        [JsonIgnore]
         public int cd_pacient { get; set; }
 
-        [JsonIgnore]
         [ForeignKey("cd_pacient")]
         public Pacients? pacient { get; set; }
 
