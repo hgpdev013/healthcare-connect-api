@@ -73,6 +73,8 @@ namespace apihealthcareconnect.Controllers
                 userToLogin.cd_user!.Value,
                 userToLogin.nm_user,
                 userToLogin.ds_email,
+                userToLogin.ds_cellphone,
+                userToLogin.user_photo,
                 new UserTypeViewModel(
                     userToLogin.userType.cd_user_type,
                     userToLogin.userType.ds_user_type,
