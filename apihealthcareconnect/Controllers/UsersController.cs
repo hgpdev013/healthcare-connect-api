@@ -52,7 +52,7 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userToCreate = new Users(UserParams.id,
+            var userToCreate = new Users(null,
                 UserParams.cpf,
                 UserParams.documentNumber,
                 UserParams.name,
@@ -69,7 +69,8 @@ namespace apihealthcareconnect.Controllers
                 UserParams.city,
                 UserParams.gender,
                 UserParams.neighborhood,
-                UserParams.isActive);
+                UserParams.isActive,
+                null);
 
             var user = await _usersRepository.Add(userToCreate);
 
@@ -120,5 +121,46 @@ namespace apihealthcareconnect.Controllers
 
             return Ok(editedUser);
         }
+
+        [HttpPatch("{id}/user-photo")]
+        public async Task<IActionResult> PatchUserPhoto(int id, IFormFile photo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userToBeEdited = await _usersRepository.GetById(id);
+            if (userToBeEdited == null)
+            {
+                return NotFound("Usuário não encontrado");
+            }
+            if (photo == null || photo.Length == 0)
+            {
+                return BadRequest("Nenhuma foto enviada.");
+            }
+
+            try
+            {
+                // Lê os dados binários da foto
+                using (var memoryStream = new MemoryStream())
+                {
+                    await photo.CopyToAsync(memoryStream);
+                    byte[] photoData = memoryStream.ToArray();
+
+                    userToBeEdited.user_photo = photoData;
+
+                    await _usersRepository.Update(userToBeEdited);
+
+                    return Ok(photoData);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao atualizar a foto do usuário: {ex.Message}");
+            }
+        }
+
     }
 }

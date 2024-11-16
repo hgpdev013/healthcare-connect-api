@@ -57,7 +57,7 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userToCreate = new Users(UserPacientsParams.id,
+            var userToCreate = new Users(null,
                 UserPacientsParams.cpf,
                 UserPacientsParams.documentNumber,
                 UserPacientsParams.name,
@@ -75,7 +75,8 @@ namespace apihealthcareconnect.Controllers
                 UserPacientsParams.city,
                 UserPacientsParams.gender,
                 UserPacientsParams.neighborhood,
-                UserPacientsParams.isActive);
+                UserPacientsParams.isActive,
+                null);
 
             var createdUser = await _usersRepository.Add(userToCreate);
 

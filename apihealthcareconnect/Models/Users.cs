@@ -73,8 +73,27 @@ namespace apihealthcareconnect.Models
         [ForeignKey("cd_user_type")]
         public UserType? userType { get; set; }
 
-        public Users(int? cd_user, string cd_cpf, string cd_identification, string nm_user, DateTime dt_birth, string ds_email, string ds_cellphone, string ds_login, int cd_user_type, string? nm_street,
-            int? cd_street_number, string? ds_complement, string? nm_state, string? cd_cep, string? nm_city, string? ds_gender, string? ds_neighborhood, bool is_active)
+        public byte[]? user_photo {  get; set; }
+
+        public Users(int? cd_user,
+            string cd_cpf,
+            string cd_identification,
+            string nm_user,
+            DateTime dt_birth,
+            string ds_email,
+            string ds_cellphone,
+            string ds_login,
+            int cd_user_type,
+            string? nm_street,
+            int? cd_street_number,
+            string? ds_complement,
+            string? nm_state,
+            string? cd_cep,
+            string? nm_city,
+            string? ds_gender,
+            string? ds_neighborhood,
+            bool is_active,
+            byte[]? user_photo)
         {
             this.cd_user = cd_user;
             this.cd_cpf = cd_cpf;
@@ -94,6 +113,7 @@ namespace apihealthcareconnect.Models
             this.ds_gender = ds_gender;
             this.ds_neighborhood = ds_neighborhood;
             this.is_active = is_active;
+            this.user_photo = user_photo;
         }
     }
 }
