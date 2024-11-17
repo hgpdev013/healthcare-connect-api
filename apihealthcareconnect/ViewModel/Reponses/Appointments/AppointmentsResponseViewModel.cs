@@ -28,7 +28,7 @@
             AppointmentsDoctorResponseViewModel doctorData,
             AppointmentsPacientResponseViewModel pacientData,
             List<AppointmentReturnResponseViewModel> appointmentsReturn,
-            List<AppointmentsExamResponseViewModel> exams
+            List<Exams.ExamWithoutByteResponseViewModel> exams
             )
         {
             this.id = id;

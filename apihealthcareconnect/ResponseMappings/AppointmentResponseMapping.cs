@@ -6,6 +6,13 @@ namespace apihealthcareconnect.ResponseMappings
 {
     public class AppointmentResponseMapping
     {
+        private ExamResponseMapping _examResponseMapping;
+
+        public AppointmentResponseMapping(ExamResponseMapping examResponseMapping) 
+        {
+            _examResponseMapping = examResponseMapping;
+        }
+
         public AppointmentsResponseViewModel mapAppointmentResponse(Appointments appointment)
         {
             var mappedAppointment = new AppointmentsResponseViewModel(
@@ -54,7 +61,8 @@ namespace apihealthcareconnect.ResponseMappings
                                 ar.doctorData.specialtyType.is_active
                             )
                         )
-                    )).ToList()
+                    )).ToList(),
+                    appointment.exams.Select(e => _examResponseMapping.mapExamsAppointments(e)).ToList()
                 );
 
             return mappedAppointment;

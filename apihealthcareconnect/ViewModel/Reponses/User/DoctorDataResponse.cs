@@ -7,7 +7,7 @@ namespace apihealthcareconnect.ViewModel.Reponses.User
 {
     public class DoctorDataResponse
     {
-        public string crm { get; set; }
+        public string? crm { get; set; }
 
         public int userId { get; set; }
 
@@ -15,7 +15,7 @@ namespace apihealthcareconnect.ViewModel.Reponses.User
 
         public SpecialtyTypeViewModel specialtyType { get; set; } = null!;
 
-        public DoctorDataResponse(string crm, int userId, string? observation, SpecialtyTypeViewModel specialtyType)
+        public DoctorDataResponse(string? crm, int userId, string? observation, SpecialtyTypeViewModel specialtyType)
         {
             this.crm = crm;
             this.userId = userId;

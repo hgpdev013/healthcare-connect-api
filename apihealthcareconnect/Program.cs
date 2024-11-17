@@ -56,6 +56,7 @@ namespace apihealthcareconnect
             builder.Services.AddScoped<IAppointmentsReturnRepository, AppointmentsReturnRepository>();
             builder.Services.AddScoped<AppointmentResponseMapping>();
             builder.Services.AddScoped<UserResponseMapping>();
+            builder.Services.AddScoped<ExamResponseMapping>();
             builder.Services.AddScoped<TokenService>();
             builder.Services.AddScoped<EmailService>();
 
