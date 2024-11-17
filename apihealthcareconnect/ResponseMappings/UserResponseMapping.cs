@@ -91,7 +91,8 @@ namespace apihealthcareconnect.ResponseMappings
                 user.nm_city,
                 user.ds_gender,
                 user.is_active,
-                isList ? null : user.user_photo,
+                //isList ? null : user.user_photo,
+                user.user_photo,
                 user.userType.cd_user_type == 1 ? MapDoctorData(user.doctorData) : null,
                 user.userType.cd_user_type == 2 ? MapPacientData(user.pacientData) : null,
                 MapUserType(user.userType)
