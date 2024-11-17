@@ -1,6 +1,4 @@
-﻿using Humanizer.DateTimeHumanizeStrategy;
-
-namespace apihealthcareconnect.ViewModel.Reponses.Appointments
+﻿namespace apihealthcareconnect.ViewModel.Reponses.Appointments
 {
     public class AppointmentsResponseViewModel
     {
@@ -18,6 +16,8 @@ namespace apihealthcareconnect.ViewModel.Reponses.Appointments
 
         public AppointmentsPacientResponseViewModel pacientData { get; set; }
 
+        public List<Exams.ExamWithoutByteResponseViewModel> exams {  get; set; }
+
         public List<AppointmentReturnResponseViewModel> appointmentsReturn { get; set; }
 
         public AppointmentsResponseViewModel(int id,
@@ -27,7 +27,8 @@ namespace apihealthcareconnect.ViewModel.Reponses.Appointments
             string status,
             AppointmentsDoctorResponseViewModel doctorData,
             AppointmentsPacientResponseViewModel pacientData,
-            List<AppointmentReturnResponseViewModel> appointmentsReturn
+            List<AppointmentReturnResponseViewModel> appointmentsReturn,
+            List<AppointmentsExamResponseViewModel> exams
             )
         {
             this.id = id;
@@ -37,6 +38,7 @@ namespace apihealthcareconnect.ViewModel.Reponses.Appointments
             this.status = status;
             this.doctorData = doctorData;
             this.pacientData = pacientData;
+            this.exams = exams;
             this.appointmentsReturn = appointmentsReturn;
         }
     }

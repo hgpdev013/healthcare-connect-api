@@ -28,6 +28,8 @@ namespace apihealthcareconnect.Models
 
         public List<AppointmentsReturn> appointmentsReturn { get; set; }
 
+        public List<Exams> exams {  get; set; }
+
         public Appointments(int? cd_appointment, DateTime dt_appointment, string? ds_observation, bool is_active, int cd_pacient, int cd_doctor)
         {
             this.cd_appointment = cd_appointment ?? null;
