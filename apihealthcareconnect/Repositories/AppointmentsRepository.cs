@@ -14,7 +14,7 @@ namespace apihealthcareconnect.Repositories
             _context = context;
         }
 
-        public async Task<List<Appointments>> GetAll(int? pacientId, int? doctorId)
+        public async Task<List<Appointments>> GetAll(int? pacientId, int? doctorId, DateTime? date)
         {
             var appointmentsListQuery = _context.Appointments.AsQueryable();
 
@@ -28,7 +28,13 @@ namespace apihealthcareconnect.Repositories
                 appointmentsListQuery = appointmentsListQuery.Where(a => a.cd_doctor == doctorId);
             }
 
+            if (date.HasValue)
+            {
+                appointmentsListQuery = appointmentsListQuery.Where(a => a.dt_appointment == date);
+            }
+
             appointmentsListQuery = appointmentsListQuery
+                .Include(i => i.exams)
                 .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.pacientData).ThenInclude(i => i.Users)
@@ -41,6 +47,7 @@ namespace apihealthcareconnect.Repositories
         public async Task<Appointments> GetById(int id)
         {
             return await _context.Appointments
+                .Include(i => i.exams)
                 .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.pacientData).ThenInclude(i => i.Users)
@@ -63,13 +70,33 @@ namespace apihealthcareconnect.Repositories
 
         public async Task<Appointments> Add(Appointments appointments)
         {
-            throw new NotImplementedException();
+            var createdAppointment = await _context.AddAsync(appointments);
+            await _context.SaveChangesAsync();
+
+            return await _context.Appointments
+                .Include(i => i.exams)
+                .Include(i => i.appointmentsReturn)
+                .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.pacientData).ThenInclude(i => i.Users)
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .FirstOrDefaultAsync(u => u.cd_appointment == createdAppointment.Entity.cd_appointment);
         }
 
 
         public async Task<Appointments> Update(Appointments appointments)
         {
-            throw new NotImplementedException();
+            var updatedAppointment = _context.Update(appointments);
+            await _context.SaveChangesAsync();
+
+            return await _context.Appointments
+                .Include(i => i.exams)
+                .Include(i => i.appointmentsReturn)
+                .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.pacientData).ThenInclude(i => i.Users)
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .FirstOrDefaultAsync(u => u.cd_appointment == updatedAppointment.Entity.cd_appointment);
         }
     }
 }

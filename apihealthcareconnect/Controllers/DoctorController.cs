@@ -5,7 +5,6 @@ using apihealthcareconnect.ViewModel.Reponses.User;
 using apihealthcareconnect.ViewModel.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Numerics;
 
 namespace apihealthcareconnect.Controllers
 {

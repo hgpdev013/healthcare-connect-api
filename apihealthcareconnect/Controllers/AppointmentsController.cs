@@ -4,6 +4,7 @@ using apihealthcareconnect.ViewModel.Reponses.Appointments;
 using apihealthcareconnect.ResponseMappings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using apihealthcareconnect.ViewModel.Requests.Appointments;
 
 namespace apihealthcareconnect.Controllers
 {
@@ -54,7 +55,8 @@ namespace apihealthcareconnect.Controllers
 
             var appointments = await _appointmentsRepository.GetAll(
                 pacientByUserId?.pacientData?.cd_pacient,
-                doctorByUserId?.doctorData?.cd_doctor
+                doctorByUserId?.doctorData?.cd_doctor,
+                null
             );
 
             var response = appointments
@@ -121,6 +123,126 @@ namespace apihealthcareconnect.Controllers
             );
 
             return Ok(response);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(AppointmentsResponseViewModel), 200)]
+        public async Task<IActionResult> PostAppointment(AppointmentRequestViewModel AppointmentParams)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var doctorScheduled = await _usersRepository.GetById(AppointmentParams.doctorId);
+
+            if (doctorScheduled == null) {
+                return NotFound("Médico não existe");
+            }
+
+            if (doctorScheduled.cd_user_type != 1)
+            {
+                return BadRequest("Usuário não é médico");
+            }
+
+            var pacientScheduled = await _usersRepository.GetById(AppointmentParams.pacientId);
+
+            if (pacientScheduled == null) {
+                return NotFound("Paciente não existe");
+            }
+
+            if (pacientScheduled.cd_user_type != 2)
+            {
+                return BadRequest("Usuário não é paciente");
+            }
+
+            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, null, AppointmentParams.date);
+
+            if (appointmentsOnSameDate.Count > 0)
+            {
+                return BadRequest("Já existe uma consulta no mesmo horário");
+            }
+
+            var appointmentToCreate = new Appointments(
+                AppointmentParams.id,
+                AppointmentParams.date,
+                AppointmentParams.observation,
+                AppointmentParams.isActive,
+                pacientScheduled.pacientData.cd_pacient!.Value,
+                doctorScheduled.doctorData.cd_doctor
+            );
+
+            var createdAppointment = await _appointmentsRepository.Add(appointmentToCreate);
+
+            if (createdAppointment == null)
+            {
+                return BadRequest("Erro ao cadastrar consulta");
+            }
+
+            var createdAppointmentFormatted = _appointmentResponseMapping.mapAppointmentResponse(createdAppointment);
+
+            return Ok(createdAppointmentFormatted);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(AppointmentsResponseViewModel), 200)]
+        public async Task<IActionResult> PutAppointment(AppointmentRequestViewModel AppointmentParams)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (AppointmentParams.id == null) {
+                return NotFound("Consulta inválida");
+            }
+
+            var doctorScheduled = await _usersRepository.GetById(AppointmentParams.doctorId);
+
+            if (doctorScheduled == null)
+            {
+                return NotFound("Médico não existe");
+            }
+
+            if (doctorScheduled.cd_user_type != 1)
+            {
+                return BadRequest("Usuário não é médico");
+            }
+
+            var pacientScheduled = await _usersRepository.GetById(AppointmentParams.pacientId);
+
+            if (pacientScheduled == null)
+            {
+                return NotFound("Paciente não existe");
+            }
+
+            if (pacientScheduled.cd_user_type != 2)
+            {
+                return BadRequest("Usuário não é paciente");
+            }
+
+            //if (DateTime.Now >= AppointmentParams.date)
+            //{
+            //    return Forbid("Não pode alterar dados consulta após já ter ultrapassado a data de agendamento");
+            //}
+
+            var appointmentToBeEdited = await _appointmentsRepository.GetById(AppointmentParams.id!.Value);
+
+            if(appointmentToBeEdited == null)
+            {
+                return NotFound("Consulta desejada não existe");
+            }
+
+            var updatedAppointment = await _appointmentsRepository.Update(appointmentToBeEdited);
+
+            if (updatedAppointment == null)
+            {
+                return BadRequest("Erro ao cadastrar consulta");
+            }
+
+            var updatedAppointmentFormatted = _appointmentResponseMapping.mapAppointmentResponse(updatedAppointment);
+
+            return Ok(updatedAppointmentFormatted);
         }
     }
 }
