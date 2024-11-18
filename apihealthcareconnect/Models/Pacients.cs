@@ -15,7 +15,7 @@ namespace apihealthcareconnect.Models
         [ForeignKey("cd_user")]
         public Users Users { get; set; }
 
-        public List<Allergies> Allergies { get; set; }
+        public List<Allergies> Allergies { get; set; } = new List<Allergies>();
 
         public Pacients(int? cd_pacient, int cd_user)
         {

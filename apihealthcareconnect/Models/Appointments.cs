@@ -26,9 +26,9 @@ namespace apihealthcareconnect.Models
         [ForeignKey("cd_doctor")]
         public Doctors doctorData { get; set; }
 
-        public List<AppointmentsReturn> appointmentsReturn { get; set; }
+        public List<AppointmentsReturn>? appointmentsReturn { get; set; } = new List<AppointmentsReturn>();
 
-        public List<Exams> exams {  get; set; }
+        public List<Exams>? exams {  get; set; } = new List<Exams>();
 
         public Appointments(int? cd_appointment, DateTime dt_appointment, string? ds_observation, bool is_active, int cd_pacient, int cd_doctor)
         {

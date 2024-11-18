@@ -16,9 +16,9 @@
 
         public AppointmentsPacientResponseViewModel pacientData { get; set; }
 
-        public List<Exams.ExamWithoutByteResponseViewModel> exams {  get; set; }
+        public List<Exams.ExamWithoutByteResponseViewModel>? exams {  get; set; }
 
-        public List<AppointmentReturnResponseViewModel> appointmentsReturn { get; set; }
+        public List<AppointmentReturnResponseViewModel>? appointmentsReturn { get; set; }
 
         public AppointmentsResponseViewModel(int id,
             DateTime appointmentDate,
