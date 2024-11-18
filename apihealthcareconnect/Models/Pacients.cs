@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace apihealthcareconnect.Models
 {
@@ -16,6 +15,10 @@ namespace apihealthcareconnect.Models
         public Users Users { get; set; }
 
         public List<Allergies> Allergies { get; set; } = new List<Allergies>();
+
+        public List<Exams> exams { get; set; } = new List<Exams>();
+
+        public List<Prescriptions> prescriptions { get; set; } = new List<Prescriptions>();
 
         public Pacients(int? cd_pacient, int cd_user)
         {

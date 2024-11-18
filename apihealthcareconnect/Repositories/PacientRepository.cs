@@ -18,6 +18,9 @@ namespace apihealthcareconnect.Repositories
         {
             var pacient = await _context.Pacients
                 .Include(i => i.Users.userType).ThenInclude(i => i.permissions)
+                .Include(i => i.Allergies)
+                .Include(i => i.exams)
+                .Include(i => i.prescriptions)
                 .FirstOrDefaultAsync(x => x.cd_user == userId);
 
             return pacient;

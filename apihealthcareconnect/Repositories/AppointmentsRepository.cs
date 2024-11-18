@@ -34,6 +34,7 @@ namespace apihealthcareconnect.Repositories
             }
 
             appointmentsListQuery = appointmentsListQuery
+                .Include(i => i.prescriptions)
                 .Include(i => i.exams)
                 .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
@@ -47,6 +48,7 @@ namespace apihealthcareconnect.Repositories
         public async Task<Appointments> GetById(int id)
         {
             return await _context.Appointments
+                .Include(i => i.prescriptions)
                 .Include(i => i.exams)
                 .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
@@ -74,6 +76,7 @@ namespace apihealthcareconnect.Repositories
             await _context.SaveChangesAsync();
 
             return await _context.Appointments
+                .Include(i => i.prescriptions)
                 .Include(i => i.exams)
                 .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
@@ -90,6 +93,7 @@ namespace apihealthcareconnect.Repositories
             await _context.SaveChangesAsync();
 
             return await _context.Appointments
+                .Include(i => i.prescriptions)
                 .Include(i => i.exams)
                 .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)

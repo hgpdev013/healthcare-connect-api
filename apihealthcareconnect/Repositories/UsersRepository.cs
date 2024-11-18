@@ -22,6 +22,8 @@ namespace apihealthcareconnect.Repositories
             return await _context.Users
                 .Include(u => u.userType).ThenInclude(ut => ut.permissions)
                 .Include(u => u.doctorData).ThenInclude(d => d.specialtyType)
+                .Include(i => i.pacientData).ThenInclude(i => i.exams)
+                .Include(i => i.pacientData).ThenInclude(i => i.prescriptions)
                 .Include(u => u.pacientData).ThenInclude(p => p.Allergies)
                 .FirstOrDefaultAsync(u => u.cd_user == userCreated.Entity.cd_user);
         }
@@ -34,6 +36,8 @@ namespace apihealthcareconnect.Repositories
             return await _context.Users
                 .Include(u => u.userType).ThenInclude(ut => ut.permissions)
                 .Include(u => u.doctorData).ThenInclude(d => d.specialtyType)
+                .Include(i => i.pacientData).ThenInclude(i => i.exams)
+                .Include(i => i.pacientData).ThenInclude(i => i.prescriptions)
                 .Include(u => u.pacientData).ThenInclude(p => p.Allergies)
                 .FirstOrDefaultAsync(u => u.cd_user == updatedUser.Entity.cd_user);
         }
@@ -44,6 +48,8 @@ namespace apihealthcareconnect.Repositories
                 .Where(x => !showAllUserTypes ? !new[] { 1 , 2 }.Contains(x.cd_user_type) : true)
                 .Include(i => i.userType).ThenInclude(i => i.permissions)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.pacientData).ThenInclude(i => i.exams)
+                .Include(i => i.pacientData).ThenInclude(i => i.prescriptions)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .ToListAsync();
         }
@@ -53,6 +59,8 @@ namespace apihealthcareconnect.Repositories
             return await _context.Users
                 .Include(i => i.userType).ThenInclude(i => i.permissions)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.pacientData).ThenInclude(i => i.exams)
+                .Include(i => i.pacientData).ThenInclude(i => i.prescriptions)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .FirstOrDefaultAsync(x => x.cd_user == id);
         }
@@ -62,6 +70,8 @@ namespace apihealthcareconnect.Repositories
             return await _context.Users.Where(x => x.cd_user_type == userTypeId)
                 .Include(i => i.userType).ThenInclude(i => i.permissions)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.pacientData).ThenInclude(i => i.exams)
+                .Include(i => i.pacientData).ThenInclude(i => i.prescriptions)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .ToListAsync();
         }

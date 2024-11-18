@@ -6,6 +6,14 @@ namespace apihealthcareconnect.ResponseMappings
 {
     public class UserResponseMapping
     {
+        private readonly ExamResponseMapping _examResponseMapping;
+        private readonly PrescriptionResponseMapping _prescriptionResponseMapping;
+
+        public UserResponseMapping(ExamResponseMapping examResponseMapping, PrescriptionResponseMapping prescriptionResponseMapping)
+        {
+            _examResponseMapping = examResponseMapping;
+            _prescriptionResponseMapping = prescriptionResponseMapping;
+        }
 
         public ViewModel.Requests.UserTypeViewModel MapUserType(UserType userType)
         {
@@ -66,7 +74,9 @@ namespace apihealthcareconnect.ResponseMappings
         public ViewModel.Reponses.User.PacientDataResponse MapPacientData(Pacients pacient)
         {
             var pacientData = new ViewModel.Reponses.User.PacientDataResponse(pacient.Users.cd_user!.Value,
-                pacient.Allergies.Select(a => MapAllergies(a)).ToList()
+                pacient.Allergies.Select(a => MapAllergies(a)).ToList(),
+                pacient.exams.Select(e => _examResponseMapping.mapExamsAppointments(e)).ToList(),
+                pacient.prescriptions.Select(p => _prescriptionResponseMapping.mapPrescriptionsAppointments(p)).ToList()
             );
 
             return pacientData;
@@ -91,8 +101,8 @@ namespace apihealthcareconnect.ResponseMappings
                 user.nm_city,
                 user.ds_gender,
                 user.is_active,
-                //isList ? null : user.user_photo,
-                user.user_photo,
+                isList ? null : user.user_photo,
+                //user.user_photo,
                 MapUserType(user.userType),
                 user.cd_user_type == 1 ? MapDoctorData(user.doctorData) : null,
                 user.cd_user_type == 2 ? MapPacientData(user.pacientData) : null
