@@ -9,7 +9,7 @@ namespace apihealthcareconnect.ResponseMappings
         public PrescriptionWithoutByteResponseViewModel mapPrescriptionsAppointments(Prescriptions prescription)
         {
             var response = new PrescriptionWithoutByteResponseViewModel(
-                prescription.cd_prescription,
+                prescription.cd_prescription!.Value,
                 prescription.nm_prescription_file,
                 prescription.nm_prescription_extension,
                 prescription.dt_prescription
@@ -21,7 +21,7 @@ namespace apihealthcareconnect.ResponseMappings
         public PrescriptionWithByteResponseViewModel mapPrescriptionsGeneral(Prescriptions prescription)
         {
             var response = new PrescriptionWithByteResponseViewModel(
-                prescription.cd_prescription,
+                prescription.cd_prescription!.Value,
                 prescription.nm_prescription_file,
                 prescription.nm_prescription_extension,
                 prescription.dt_prescription,

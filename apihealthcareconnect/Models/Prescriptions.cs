@@ -8,7 +8,7 @@ namespace apihealthcareconnect.Models
     public class Prescriptions
     {
         [Key]
-        public int cd_prescription { get; set; }
+        public int? cd_prescription { get; set; }
 
         public DateTime dt_prescription { get; set; }
 
@@ -32,7 +32,7 @@ namespace apihealthcareconnect.Models
         [ForeignKey("cd_pacient")]
         public Pacients pacientData { get; set; }
 
-        public Prescriptions(int cd_prescription,
+        public Prescriptions(int? cd_prescription,
             DateTime dt_prescription,
             string nm_prescription_file,
             string nm_prescription_extension,

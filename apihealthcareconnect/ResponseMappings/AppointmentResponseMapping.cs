@@ -7,10 +7,12 @@ namespace apihealthcareconnect.ResponseMappings
     public class AppointmentResponseMapping
     {
         private ExamResponseMapping _examResponseMapping;
+        private PrescriptionResponseMapping _prescriptionResponseMapping;
 
-        public AppointmentResponseMapping(ExamResponseMapping examResponseMapping) 
+        public AppointmentResponseMapping(ExamResponseMapping examResponseMapping, PrescriptionResponseMapping prescriptionResponseMapping) 
         {
             _examResponseMapping = examResponseMapping;
+            _prescriptionResponseMapping = prescriptionResponseMapping;
         }
 
         public AppointmentsResponseViewModel mapAppointmentResponse(Appointments appointment)
@@ -45,7 +47,8 @@ namespace apihealthcareconnect.ResponseMappings
                         appointment.pacientData.Allergies.Select(x => new AppointmentsAllergyResponseViewModel(x.cd_allergy!.Value, x.nm_allergy)).ToList()
                     ),
                     appointment.appointmentsReturn.Select(ar => mapAppointmentReturn(ar)).ToList(),
-                    appointment.exams.Select(e => _examResponseMapping.mapExamsAppointments(e)).ToList()
+                    appointment.exams.Select(e => _examResponseMapping.mapExamsAppointments(e)).ToList(),
+                    appointment.prescriptions.Select(p => _prescriptionResponseMapping.mapPrescriptionsAppointments(p)).ToList()
                 );
 
             return mappedAppointment;

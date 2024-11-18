@@ -1,4 +1,4 @@
-﻿namespace apihealthcareconnect.ViewModel.Reponses.Exams
+﻿namespace apihealthcareconnect.ViewModel.Reponses.Prescriptions
 {
     public class PrescriptionWithoutByteResponseViewModel
     {

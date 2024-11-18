@@ -54,9 +54,12 @@ namespace apihealthcareconnect
             builder.Services.AddScoped<IAllergiesRepository, AllergiesRepository>();
             builder.Services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
             builder.Services.AddScoped<IAppointmentsReturnRepository, AppointmentsReturnRepository>();
+            builder.Services.AddScoped<IExamsRepository, ExamsRepository>();
+            builder.Services.AddScoped<IPrescriptionsRepository, PrescriptionsRepository>();
             builder.Services.AddScoped<AppointmentResponseMapping>();
             builder.Services.AddScoped<UserResponseMapping>();
             builder.Services.AddScoped<ExamResponseMapping>();
+            builder.Services.AddScoped<PrescriptionResponseMapping>();
             builder.Services.AddScoped<TokenService>();
             builder.Services.AddScoped<EmailService>();
 

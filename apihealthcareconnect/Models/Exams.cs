@@ -8,7 +8,7 @@ namespace apihealthcareconnect.Models
     public class Exams
     {
         [Key]
-        public int cd_exam { get; set; }
+        public int? cd_exam { get; set; }
 
         public DateTime dt_exam { get; set; }
 
@@ -32,7 +32,7 @@ namespace apihealthcareconnect.Models
         [ForeignKey("cd_pacient")]
         public Pacients pacientData { get; set; }
 
-        public Exams(int cd_exam, DateTime dt_exam, string nm_exam_file, string nm_file_extension, byte[] exam, int cd_appointment, int cd_pacient)
+        public Exams(int? cd_exam, DateTime dt_exam, string nm_exam_file, string nm_file_extension, byte[] exam, int cd_appointment, int cd_pacient)
         {
             this.cd_exam = cd_exam;
             this.dt_exam = dt_exam;

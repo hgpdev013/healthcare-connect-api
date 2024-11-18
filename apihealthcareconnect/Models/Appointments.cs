@@ -29,6 +29,7 @@ namespace apihealthcareconnect.Models
         public List<AppointmentsReturn>? appointmentsReturn { get; set; } = new List<AppointmentsReturn>();
 
         public List<Exams>? exams {  get; set; } = new List<Exams>();
+        public List<Prescriptions>? prescriptions { get; set; } = new List<Prescriptions>();
 
         public Appointments(int? cd_appointment, DateTime dt_appointment, string? ds_observation, bool is_active, int cd_pacient, int cd_doctor)
         {
