@@ -14,9 +14,25 @@ namespace apihealthcareconnect.Repositories
             _context = context;
         }
 
-        public Task<List<AppointmentsReturn>> GetAll(int? appointmentId)
+        public async Task<List<AppointmentsReturn>> GetAll(int? appointmentId, DateTime? date)
         {
-            throw new NotImplementedException();
+            var appointmentsListQuery = _context.AppointmentsReturn.AsQueryable();
+
+            if (appointmentId.HasValue)
+            {
+                appointmentsListQuery = appointmentsListQuery.Where(a => a.cd_doctor == appointmentId);
+            }
+
+            if (date.HasValue)
+            {
+                appointmentsListQuery = appointmentsListQuery.Where(a => a.dt_return == date);
+            }
+
+            appointmentsListQuery = appointmentsListQuery
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.doctorData).ThenInclude(i => i.Users);
+
+            return await appointmentsListQuery.ToListAsync();
         }
 
         public Task<AppointmentsReturn> GetById(int id)

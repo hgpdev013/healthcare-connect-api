@@ -4,7 +4,7 @@ namespace apihealthcareconnect.Interfaces
 {
     public interface IAppointmentsReturnRepository
     {
-        Task<List<AppointmentsReturn>> GetAll(int? appointmentId);
+        Task<List<AppointmentsReturn>> GetAll(int? appointmentId, DateTime? date);
 
         Task<AppointmentsReturn> GetById(int id);
 
