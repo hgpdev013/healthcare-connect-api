@@ -144,7 +144,7 @@ namespace apihealthcareconnect.Controllers
                 return NotFound("Retorno de consulta desejado não existe");
             }
 
-            if (AppointmentParams.date != appointmentReturnToBeEdited.dt_return && DateTime.Now >= appointmentReturnToBeEdited.dt_return)
+            if (AppointmentParams.date != appointmentReturnToBeEdited.dt_return && DateTime.Now.AddDays(-1) >= appointmentReturnToBeEdited.dt_return)
             {
                 return Forbid("A data da consulta não pode ser alterada após a data antiga ter passado.");
             }
