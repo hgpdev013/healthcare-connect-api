@@ -62,8 +62,8 @@ namespace apihealthcareconnect.Controllers
                         var examToCreate = new Exams(
                             null,
                             DateTime.Now,
-                            file.Name,
-                            Path.GetExtension(file.Name),
+                            file.FileName,
+                            Path.GetExtension(file.FileName),
                             fileData,
                             appointmentId,
                             appointmentToAttach.cd_pacient
@@ -81,8 +81,8 @@ namespace apihealthcareconnect.Controllers
                         var prescriptionToCreate = new Prescriptions(
                             null,
                             DateTime.Now,
-                            file.Name,
-                            Path.GetExtension(file.Name),
+                            file.FileName,
+                            Path.GetExtension(file.FileName),
                             fileData,
                             appointmentId,
                             appointmentToAttach.cd_pacient
@@ -121,13 +121,27 @@ namespace apihealthcareconnect.Controllers
             {
                 if (examOrPrescription == "exam")
                 {
-                    await _examsRepository.Delete(id);
+                    var examToDelete = await _examsRepository.GetById(id);
+
+                    if(examToDelete == null)
+                    {
+                        return NotFound("Exame não existe");
+                    }
+
+                    await _examsRepository.Delete(examToDelete);
                     return Ok(id);
                 }
 
                 if (examOrPrescription == "prescription")
                 {
-                    await _prescriptionsRepository.Delete(id);
+                    var prescriptionToDelete = await _prescriptionsRepository.GetById(id);
+
+                    if (prescriptionToDelete == null)
+                    {
+                        return NotFound("Exame não existe");
+                    }
+
+                    await _prescriptionsRepository.Delete(prescriptionToDelete);
                     return Ok(id);
                 }
 

@@ -37,9 +37,9 @@ namespace apihealthcareconnect.Repositories
             return prescriptionUpdated.Entity;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Prescriptions prescription)
         {
-            _context.Remove(id);
+            _context.Remove(prescription);
             await _context.SaveChangesAsync();
         }
     }

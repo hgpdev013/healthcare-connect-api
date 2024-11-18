@@ -12,6 +12,6 @@ namespace apihealthcareconnect.Interfaces
 
         Task<Prescriptions> Update(Prescriptions prescription);
 
-        Task Delete(int id);
+        Task Delete(Prescriptions prescription);
     }
 }

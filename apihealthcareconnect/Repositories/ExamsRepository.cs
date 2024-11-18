@@ -37,9 +37,9 @@ namespace apihealthcareconnect.Repositories
             return examUpdated.Entity;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Exams exam)
         {
-            _context.Remove(id);
+            _context.Remove(exam);
             await _context.SaveChangesAsync();
         }
     }

@@ -12,6 +12,6 @@ namespace apihealthcareconnect.Interfaces
 
         Task<Exams> Update(Exams exam);
 
-        Task Delete(int id);
+        Task Delete(Exams exam);
     }
 }
