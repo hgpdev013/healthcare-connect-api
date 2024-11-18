@@ -44,24 +44,7 @@ namespace apihealthcareconnect.ResponseMappings
                         appointment.pacientData.Users.ds_gender,
                         appointment.pacientData.Allergies.Select(x => new AppointmentsAllergyResponseViewModel(x.cd_allergy!.Value, x.nm_allergy)).ToList()
                     ),
-                    appointment.appointmentsReturn.Select(ar => new AppointmentReturnResponseViewModel(
-                        ar.cd_appointment_return!.Value,
-                        ar.dt_return,
-                        ar.ds_observation,
-                        ar.is_active,
-                        GenerateAppointmentStatus(ar.is_active, ar.dt_return),
-                        new AppointmentsDoctorResponseViewModel(
-                            ar.doctorData.cd_user!.Value,
-                            ar.doctorData.Users.nm_user,
-                            ar.doctorData.cd_crm,
-                            new AppointmentsSpecialtyTypeResponseViewModel(
-                                ar.doctorData.specialtyType.cd_specialty_type!.Value,
-                                ar.doctorData.specialtyType.ds_specialty_type,
-                                ar.doctorData.specialtyType.dt_interval_between_appointments,
-                                ar.doctorData.specialtyType.is_active
-                            )
-                        )
-                    )).ToList(),
+                    appointment.appointmentsReturn.Select(ar => mapAppointmentReturn(ar)).ToList(),
                     appointment.exams.Select(e => _examResponseMapping.mapExamsAppointments(e)).ToList()
                 );
 
@@ -87,6 +70,30 @@ namespace apihealthcareconnect.ResponseMappings
                 );
 
             return mappedAppointment;
+        }
+
+        public AppointmentReturnResponseViewModel mapAppointmentReturn(AppointmentsReturn appointmentReturn)
+        {
+            var appointmentReturnMapped = new AppointmentReturnResponseViewModel(
+                appointmentReturn.cd_appointment_return!.Value,
+                appointmentReturn.dt_return,
+                appointmentReturn.ds_observation,
+                appointmentReturn.is_active,
+                GenerateAppointmentStatus(appointmentReturn.is_active, appointmentReturn.dt_return),
+                new AppointmentsDoctorResponseViewModel(
+                    appointmentReturn.doctorData.cd_user!.Value,
+                    appointmentReturn.doctorData.Users.nm_user,
+                    appointmentReturn.doctorData.cd_crm,
+                    new AppointmentsSpecialtyTypeResponseViewModel(
+                        appointmentReturn.doctorData.specialtyType.cd_specialty_type!.Value,
+                        appointmentReturn.doctorData.specialtyType.ds_specialty_type,
+                        appointmentReturn.doctorData.specialtyType.dt_interval_between_appointments,
+                        appointmentReturn.doctorData.specialtyType.is_active
+                    )
+                )
+            );
+
+            return appointmentReturnMapped;
         }
 
         private string GenerateAppointmentStatus(bool isActive, DateTime appointmentDate)

@@ -226,7 +226,7 @@ namespace apihealthcareconnect.Controllers
 
             if (updatedAppointment == null)
             {
-                return BadRequest("Erro ao cadastrar consulta");
+                return BadRequest("Erro ao editar consulta");
             }
 
             var updatedAppointmentFormatted = _appointmentResponseMapping.mapAppointmentResponse(updatedAppointment);
