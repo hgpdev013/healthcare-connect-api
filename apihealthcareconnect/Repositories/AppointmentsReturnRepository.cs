@@ -20,7 +20,7 @@ namespace apihealthcareconnect.Repositories
 
             if (appointmentId.HasValue)
             {
-                appointmentsListQuery = appointmentsListQuery.Where(a => a.cd_doctor == appointmentId);
+                appointmentsListQuery = appointmentsListQuery.Where(a => a.cd_appointment == appointmentId);
             }
 
             if (date.HasValue)
@@ -35,9 +35,12 @@ namespace apihealthcareconnect.Repositories
             return await appointmentsListQuery.ToListAsync();
         }
 
-        public Task<AppointmentsReturn> GetById(int id)
+        public async Task<AppointmentsReturn> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.AppointmentsReturn
+               .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+               .Include(i => i.doctorData).ThenInclude(i => i.Users)
+               .FirstOrDefaultAsync(x => x.cd_appointment_return == id);
         }
 
         public async Task<List<AppointmentsReturn>> GetUnavailableTimes(int doctorId, DateTime date)
@@ -51,14 +54,26 @@ namespace apihealthcareconnect.Repositories
 
         }
 
-        public Task<AppointmentsReturn> Add(AppointmentsReturn appointmentsReturn)
+        public async Task<AppointmentsReturn> Add(AppointmentsReturn appointmentsReturn)
         {
-            throw new NotImplementedException();
+            var createdAppointmentReturn = await _context.AddAsync(appointmentsReturn);
+            await _context.SaveChangesAsync();
+
+            return await _context.AppointmentsReturn
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .FirstOrDefaultAsync(u => u.cd_appointment_return == createdAppointmentReturn.Entity.cd_appointment_return);
         }
 
-        public Task<AppointmentsReturn> Update(AppointmentsReturn appointmentsReturn)
+        public async Task<AppointmentsReturn> Update(AppointmentsReturn appointmentsReturn)
         {
-            throw new NotImplementedException();
+            var updatedAppointmentReturn = await _context.AddAsync(appointmentsReturn);
+            await _context.SaveChangesAsync();
+
+            return await _context.AppointmentsReturn
+                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .FirstOrDefaultAsync(u => u.cd_appointment_return == updatedAppointmentReturn.Entity.cd_appointment_return);
         }
     }
 }

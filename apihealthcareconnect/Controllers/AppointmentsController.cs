@@ -157,8 +157,9 @@ namespace apihealthcareconnect.Controllers
             }
 
             var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, null, AppointmentParams.date);
+            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date);
 
-            if (appointmentsOnSameDate.Count > 0)
+            if (appointmentsOnSameDate.Count > 0 || returnsOnSameDate.Count > 0)
             {
                 return BadRequest("Já existe uma consulta no mesmo horário");
             }
