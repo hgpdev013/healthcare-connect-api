@@ -33,14 +33,19 @@ namespace apihealthcareconnect.Repositories
             var createdUserType = await _context.AddAsync(userType);
             await _context.SaveChangesAsync();
 
-            return createdUserType.Entity;
+            return await _context.UserTypes
+                .Include(i => i.permissions)
+                .FirstOrDefaultAsync(x => x.cd_user_type == createdUserType.Entity.cd_user_type);
         }
 
         public async Task<UserType> Update(UserType userType)
         {
             var updatedUserType = _context.Update(userType);
             await _context.SaveChangesAsync();
-            return updatedUserType.Entity;
+
+            return await _context.UserTypes
+                .Include(i => i.permissions)
+                .FirstOrDefaultAsync(x => x.cd_user_type == updatedUserType.Entity.cd_user_type);
         }
     }
 }

@@ -61,9 +61,9 @@ namespace apihealthcareconnect.ViewModel.Reponses.User
             string? gender,
             bool isActive,
             byte[]? photo,
+            UserTypeViewModel? userType,
             DoctorDataResponse? doctorData,
-            PacientDataResponse? pacientData,
-            UserTypeViewModel? userType)
+            PacientDataResponse? pacientData)
         {
             this.id = id;
             this.cpf = cpf;

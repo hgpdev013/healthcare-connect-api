@@ -4,8 +4,8 @@ namespace apihealthcareconnect.Interfaces
 {
     public interface IDoctorRepository
     {
-        Task<Doctors> Add(Doctors doctors);
+        Task<Users> Add(Doctors doctors);
 
-        Task<Doctors> Update(Doctors doctors);
+        Task<Users> Update(Doctors doctors);
     }
 }

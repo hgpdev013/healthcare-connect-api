@@ -102,7 +102,7 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("Erro ao relacionar usuário como médico");
             }
 
-            createdUser.doctorData = createdDoctor;
+            createdUser.doctorData = createdDoctor.doctorData;
 
             var createdDoctorFormatted = _userResponseMapping.MapGenericUser(false, createdUser);
 

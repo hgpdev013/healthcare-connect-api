@@ -16,7 +16,9 @@ namespace apihealthcareconnect.Repositories
 
         public async Task<Pacients> GetByUserId(int userId)
         {
-            var pacient = await _context.Pacients.FirstOrDefaultAsync(x => x.cd_user == userId);
+            var pacient = await _context.Pacients
+                .Include(i => i.Users.userType).ThenInclude(i => i.permissions)
+                .FirstOrDefaultAsync(x => x.cd_user == userId);
 
             return pacient;
         }

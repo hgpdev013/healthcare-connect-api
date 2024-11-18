@@ -18,14 +18,24 @@ namespace apihealthcareconnect.Repositories
         {
             var userCreated = await _context.AddAsync(users);
             await _context.SaveChangesAsync();
-            return userCreated.Entity;
+
+            return await _context.Users
+                .Include(u => u.userType).ThenInclude(ut => ut.permissions)
+                .Include(u => u.doctorData).ThenInclude(d => d.specialtyType)
+                .Include(u => u.pacientData).ThenInclude(p => p.Allergies)
+                .FirstOrDefaultAsync(u => u.cd_user == userCreated.Entity.cd_user);
         }
 
         public async Task<Users> Update(Users users)
         {
             var updatedUser = _context.Update(users);
             await _context.SaveChangesAsync();
-            return updatedUser.Entity;
+
+            return await _context.Users
+                .Include(u => u.userType).ThenInclude(ut => ut.permissions)
+                .Include(u => u.doctorData).ThenInclude(d => d.specialtyType)
+                .Include(u => u.pacientData).ThenInclude(p => p.Allergies)
+                .FirstOrDefaultAsync(u => u.cd_user == updatedUser.Entity.cd_user);
         }
 
         public async Task<List<Users>> GetAllExceptMedicAndPatient(bool showAllUserTypes)
