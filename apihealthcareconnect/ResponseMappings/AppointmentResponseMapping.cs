@@ -54,20 +54,20 @@ namespace apihealthcareconnect.ResponseMappings
             return mappedAppointment;
         }
 
-        public AppointmentsUnavailableTimesResponseViewModel mapUnavailableTimes(Appointments appointment, List<TimeOnly> unavailableTimes)
+        public AppointmentsUnavailableTimesResponseViewModel mapUnavailableTimes(Users doctor, List<TimeOnly> unavailableTimes)
         {
             var mappedUnavailableTimes = unavailableTimes
             .Select(time => time.ToString("HH:mm"))
             .ToList();
 
             var mappedAppointment = new AppointmentsUnavailableTimesResponseViewModel(
-                appointment.doctorData.Users.cd_user!.Value,
-                appointment.doctorData.Users.nm_user,
+                doctor.cd_user!.Value,
+                doctor.nm_user,
                 new AppointmentsSpecialtyTypeResponseViewModel(
-                    appointment.doctorData.specialtyType.cd_specialty_type!.Value,
-                    appointment.doctorData.specialtyType.ds_specialty_type,
-                    appointment.doctorData.specialtyType.dt_interval_between_appointments,
-                    appointment.doctorData.specialtyType.is_active
+                    doctor.doctorData.specialtyType.cd_specialty_type!.Value,
+                    doctor.doctorData.specialtyType.ds_specialty_type,
+                    doctor.doctorData.specialtyType.dt_interval_between_appointments,
+                    doctor.doctorData.specialtyType.is_active
                 ),
                 mappedUnavailableTimes
                 );
