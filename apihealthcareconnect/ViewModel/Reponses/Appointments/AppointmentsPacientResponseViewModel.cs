@@ -19,6 +19,18 @@
         public bool isActive { get; set; }
 
         public string gender { get; set; }
+        public string? streetName { get; set; }
+        public int? streetNumber { get; set; }
+
+        public string? complement { get; set; }
+
+        public string? neighborhood { get; set; }
+
+        public string? stateName { get; set; }
+
+        public string? cep { get; set; }
+
+        public string? city { get; set; }
 
         public List<AppointmentsAllergyResponseViewModel> allergies { get; set; }
 
@@ -31,6 +43,13 @@
             string documentNumber,
             bool isActive,
             string gender,
+            string? streetName,
+            int? streetNumber,
+            string? complement,
+            string neighborhood,
+            string stateName,
+            string cep,
+            string city,
             List<AppointmentsAllergyResponseViewModel> allergies)
         {
             this.id = id;
@@ -42,6 +61,13 @@
             this.documentNumber = documentNumber;
             this.isActive = isActive;
             this.gender = gender;
+            this.streetName = streetName;
+            this.streetNumber = streetNumber;
+            this.complement = complement;
+            this.neighborhood = neighborhood;
+            this.stateName = stateName;
+            this.cep = cep;
+            this.city = city;
             this.allergies = allergies;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using apihealthcareconnect.Interfaces;
 using apihealthcareconnect.Models;
 using apihealthcareconnect.ResponseMappings;
+using apihealthcareconnect.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -61,7 +62,7 @@ namespace apihealthcareconnect.Controllers
                     {
                         var examToCreate = new Exams(
                             null,
-                            DateTime.Now,
+                            DateTime.Now.ToBrazilTime(),
                             file.FileName,
                             Path.GetExtension(file.FileName),
                             fileData,
@@ -80,7 +81,7 @@ namespace apihealthcareconnect.Controllers
                     {
                         var prescriptionToCreate = new Prescriptions(
                             null,
-                            DateTime.Now,
+                            DateTime.Now.ToBrazilTime(),
                             file.FileName,
                             Path.GetExtension(file.FileName),
                             fileData,

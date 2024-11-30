@@ -5,6 +5,7 @@ using apihealthcareconnect.ResponseMappings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using apihealthcareconnect.ViewModel.Requests.Appointments;
+using apihealthcareconnect.Services;
 
 namespace apihealthcareconnect.Controllers
 {
@@ -92,7 +93,7 @@ namespace apihealthcareconnect.Controllers
             }
 
             var doctorByUserId = await _usersRepository.GetById(doctorUserId);
-;
+            ;
 
             if (doctorByUserId?.doctorData == null)
             {
@@ -136,7 +137,8 @@ namespace apihealthcareconnect.Controllers
 
             var doctorScheduled = await _usersRepository.GetById(AppointmentParams.doctorId);
 
-            if (doctorScheduled == null) {
+            if (doctorScheduled == null)
+            {
                 return NotFound("Médico não existe");
             }
 
@@ -147,7 +149,8 @@ namespace apihealthcareconnect.Controllers
 
             var pacientScheduled = await _usersRepository.GetById(AppointmentParams.pacientId);
 
-            if (pacientScheduled == null) {
+            if (pacientScheduled == null)
+            {
                 return NotFound("Paciente não existe");
             }
 
@@ -194,7 +197,8 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (AppointmentParams.id == null) {
+            if (AppointmentParams.id == null)
+            {
                 return NotFound("Consulta inválida");
             }
 
@@ -205,17 +209,21 @@ namespace apihealthcareconnect.Controllers
                 return NotFound("Consulta desejada não existe");
             }
 
-            if(AppointmentParams.date != appointmentToBeEdited.dt_appointment && DateTime.Now.AddDays(-1) >= appointmentToBeEdited.dt_appointment)
+            if (AppointmentParams.date != appointmentToBeEdited.dt_appointment && DateTime.Now.ToBrazilTime().AddDays(-1) >= appointmentToBeEdited.dt_appointment)
             {
                 return Forbid("A data da consulta não pode ser alterada após a data antiga ter passado.");
             }
 
             var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, null, AppointmentParams.date);
             var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date);
+            var sameAppointment = appointmentsOnSameDate.Find(a => a.cd_appointment == AppointmentParams.id);
 
-            if (appointmentsOnSameDate.Count > 0 || returnsOnSameDate.Count > 0)
+            if (sameAppointment == null)
             {
-                return BadRequest("Já existe uma consulta no mesmo horário");
+                if (appointmentsOnSameDate.Count > 0 || returnsOnSameDate.Count > 0)
+                {
+                    return BadRequest("Já existe uma consulta no mesmo horário");
+                }
             }
 
             appointmentToBeEdited.dt_appointment = AppointmentParams.date;

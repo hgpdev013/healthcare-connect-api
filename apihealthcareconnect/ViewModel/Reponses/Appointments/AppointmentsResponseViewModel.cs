@@ -16,11 +16,11 @@
 
         public AppointmentsPacientResponseViewModel pacientData { get; set; }
 
+        public List<AppointmentReturnResponseViewModel>? appointmentsReturn { get; set; } = new List<AppointmentReturnResponseViewModel>();
+
         public List<Exams.ExamWithoutByteResponseViewModel>? exams { get; set; } = new List<Exams.ExamWithoutByteResponseViewModel>();
 
         public List<Prescriptions.PrescriptionWithoutByteResponseViewModel>? prescriptions = new List<Prescriptions.PrescriptionWithoutByteResponseViewModel>();
-
-        public List<AppointmentReturnResponseViewModel>? appointmentsReturn { get; set; } = new List<AppointmentReturnResponseViewModel>();
 
         public AppointmentsResponseViewModel(int id,
             DateTime appointmentDate,

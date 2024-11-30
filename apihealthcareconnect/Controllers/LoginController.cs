@@ -67,7 +67,7 @@ namespace apihealthcareconnect.Controllers
                 return Unauthorized("Você não possui permissão para acessar esse sistema.");
             }
 
-            var token = _tokenService.GenerateJwtToken(userToLogin.cd_user.Value, userToLogin.ds_email, userToLogin.userType.ds_user_type, DateTime.Now.AddHours(9));
+            var token = _tokenService.GenerateJwtToken(userToLogin.cd_user.Value, userToLogin.ds_email, userToLogin.userType.ds_user_type, DateTime.Now.ToBrazilTime().AddHours(9));
 
             var response = new LoginResponseViewModel(
                 userToLogin.cd_user!.Value,
@@ -92,7 +92,7 @@ namespace apihealthcareconnect.Controllers
                         userToLogin.userType.permissions.sg_take_prescriptions
                     )
                 ),
-                new TokenResponseViewModel(token, 3600 * 9, DateTime.Now.AddHours(9))
+                new TokenResponseViewModel(token, 3600 * 9, DateTime.Now.ToBrazilTime().AddHours(9))
             );
 
             return Ok(response);
@@ -109,7 +109,7 @@ namespace apihealthcareconnect.Controllers
 
             var user = await _usersRepository.GetByEmail(request.email);
 
-            var token = _tokenService.GenerateJwtToken(user.cd_user.Value, user.ds_email, user.userType.ds_user_type, DateTime.Now.AddMinutes(5));
+            var token = _tokenService.GenerateJwtToken(user.cd_user.Value, user.ds_email, user.userType.ds_user_type, DateTime.Now.ToBrazilTime().AddMinutes(5));
 
             if (user == null)
             {

@@ -1,4 +1,5 @@
 ﻿using apihealthcareconnect.Models;
+using apihealthcareconnect.Services;
 using apihealthcareconnect.ViewModel;
 using apihealthcareconnect.ViewModel.Reponses.Appointments;
 
@@ -9,7 +10,7 @@ namespace apihealthcareconnect.ResponseMappings
         private ExamResponseMapping _examResponseMapping;
         private PrescriptionResponseMapping _prescriptionResponseMapping;
 
-        public AppointmentResponseMapping(ExamResponseMapping examResponseMapping, PrescriptionResponseMapping prescriptionResponseMapping) 
+        public AppointmentResponseMapping(ExamResponseMapping examResponseMapping, PrescriptionResponseMapping prescriptionResponseMapping)
         {
             _examResponseMapping = examResponseMapping;
             _prescriptionResponseMapping = prescriptionResponseMapping;
@@ -44,6 +45,13 @@ namespace apihealthcareconnect.ResponseMappings
                         appointment.pacientData.Users.cd_identification,
                         appointment.pacientData.Users.is_active,
                         appointment.pacientData.Users.ds_gender,
+                        appointment.pacientData.Users.nm_street,
+                        appointment.pacientData.Users.cd_street_number,
+                        appointment.pacientData.Users.ds_complement,
+                        appointment.pacientData.Users.ds_neighborhood,
+                        appointment.pacientData.Users.nm_state,
+                        appointment.pacientData.Users.cd_cep,
+                        appointment.pacientData.Users.nm_city,
                         appointment.pacientData.Allergies.Select(x => new AppointmentsAllergyResponseViewModel(x.cd_allergy!.Value, x.nm_allergy)).ToList()
                     ),
                     appointment.appointmentsReturn.Select(ar => mapAppointmentReturn(ar)).ToList(),
@@ -79,6 +87,7 @@ namespace apihealthcareconnect.ResponseMappings
         {
             var appointmentReturnMapped = new AppointmentReturnResponseViewModel(
                 appointmentReturn.cd_appointment_return!.Value,
+                appointmentReturn.cd_appointment,
                 appointmentReturn.dt_return,
                 appointmentReturn.ds_observation,
                 appointmentReturn.is_active,
@@ -93,7 +102,26 @@ namespace apihealthcareconnect.ResponseMappings
                         appointmentReturn.doctorData.specialtyType.dt_interval_between_appointments,
                         appointmentReturn.doctorData.specialtyType.is_active
                     )
-                )
+                ),
+                new AppointmentsPacientResponseViewModel(
+                        appointmentReturn.appointment.pacientData.cd_user,
+                        appointmentReturn.appointment.pacientData.Users.nm_user,
+                        appointmentReturn.appointment.pacientData.Users.ds_email,
+                        appointmentReturn.appointment.pacientData.Users.ds_cellphone,
+                        appointmentReturn.appointment.pacientData.Users.dt_birth,
+                        appointmentReturn.appointment.pacientData.Users.cd_cpf,
+                        appointmentReturn.appointment.pacientData.Users.cd_identification,
+                        appointmentReturn.appointment.pacientData.Users.is_active,
+                        appointmentReturn.appointment.pacientData.Users.ds_gender,
+                        appointmentReturn.appointment.pacientData.Users.nm_street,
+                        appointmentReturn.appointment.pacientData.Users.cd_street_number,
+                        appointmentReturn.appointment.pacientData.Users.ds_complement,
+                        appointmentReturn.appointment.pacientData.Users.ds_neighborhood,
+                        appointmentReturn.appointment.pacientData.Users.nm_state,
+                        appointmentReturn.appointment.pacientData.Users.cd_cep,
+                        appointmentReturn.appointment.pacientData.Users.nm_city,
+                        appointmentReturn.appointment.pacientData.Allergies.Select(x => new AppointmentsAllergyResponseViewModel(x.cd_allergy!.Value, x.nm_allergy)).ToList()
+                    )
             );
 
             return appointmentReturnMapped;
@@ -107,7 +135,7 @@ namespace apihealthcareconnect.ResponseMappings
             }
             else
             {
-                return DateTime.Now > appointmentDate ? "Concluída" : "Agendada";
+                return DateTime.Now.ToBrazilTime() > appointmentDate ? "Concluída" : "Agendada";
             }
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using apihealthcareconnect.ViewModel.Requests.Appointments;
 using apihealthcareconnect.ViewModel.Requests.Appointments.Return;
+using apihealthcareconnect.Services;
 
 namespace apihealthcareconnect.Controllers
 {
@@ -144,7 +145,7 @@ namespace apihealthcareconnect.Controllers
                 return NotFound("Retorno de consulta desejado não existe");
             }
 
-            if (AppointmentParams.date != appointmentReturnToBeEdited.dt_return && DateTime.Now.AddDays(-1) >= appointmentReturnToBeEdited.dt_return)
+            if (AppointmentParams.date != appointmentReturnToBeEdited.dt_return && DateTime.Now.ToBrazilTime().AddDays(-1) >= appointmentReturnToBeEdited.dt_return)
             {
                 return Forbid("A data da consulta não pode ser alterada após a data antiga ter passado.");
             }
@@ -152,9 +153,14 @@ namespace apihealthcareconnect.Controllers
             var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, null, AppointmentParams.date);
             var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date);
 
-            if (appointmentsOnSameDate.Count > 0 || returnsOnSameDate.Count > 0)
+            var sameReturn = returnsOnSameDate.Find(a => a.cd_appointment_return == AppointmentParams.id);
+
+            if (sameReturn == null)
             {
-                return BadRequest("Já existe uma consulta no mesmo horário");
+                if (appointmentsOnSameDate.Count > 0 || returnsOnSameDate.Count > 0)
+                {
+                    return BadRequest("Já existe uma consulta no mesmo horário");
+                }
             }
 
             appointmentReturnToBeEdited.dt_return = AppointmentParams.date;
