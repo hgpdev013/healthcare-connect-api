@@ -110,17 +110,21 @@ namespace apihealthcareconnect.Controllers
                 date
             );
 
-            var listedAppointmentsUnavailableTimes = appointmentsBasedOnDateAndDoctor
+            var listedAppointmentsUnavailableTimes = new List<TimeOnly>();
+
+            listedAppointmentsUnavailableTimes = appointmentsBasedOnDateAndDoctor
                 .Select(a => TimeOnly.FromDateTime(a.dt_appointment)).ToList();
 
-            var listedReturnsUnavailableTimes = returnsBasedOnDateAndDoctor
+            var listedReturnsUnavailableTimes = new List<TimeOnly>();
+
+            listedReturnsUnavailableTimes = returnsBasedOnDateAndDoctor
                 .Select(a => TimeOnly.FromDateTime(a.dt_return)).ToList();
 
-            var listedUnavailableTimes = listedReturnsUnavailableTimes.Concat(listedAppointmentsUnavailableTimes).ToList();
+            listedAppointmentsUnavailableTimes = listedReturnsUnavailableTimes.Concat(listedAppointmentsUnavailableTimes).ToList();
 
             var response = _appointmentResponseMapping.mapUnavailableTimes(
-                appointmentsBasedOnDateAndDoctor[0],
-                listedUnavailableTimes
+                doctorByUserId,
+                listedAppointmentsUnavailableTimes
             );
 
             return Ok(response);
