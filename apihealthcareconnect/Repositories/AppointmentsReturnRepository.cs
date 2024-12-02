@@ -30,7 +30,11 @@ namespace apihealthcareconnect.Repositories
 
             appointmentsListQuery = appointmentsListQuery
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
-                .Include(i => i.doctorData).ThenInclude(i => i.Users);
+                .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Users)
+                .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.appointment).ThenInclude(i => i.exams)
+                .Include(i => i.appointment).ThenInclude(i => i.prescriptions);
 
             return await appointmentsListQuery.ToListAsync();
         }
@@ -40,6 +44,10 @@ namespace apihealthcareconnect.Repositories
             return await _context.AppointmentsReturn
                .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                .Include(i => i.doctorData).ThenInclude(i => i.Users)
+               .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Users)
+               .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Allergies)
+               .Include(i => i.appointment).ThenInclude(i => i.exams)
+               .Include(i => i.appointment).ThenInclude(i => i.prescriptions)
                .FirstOrDefaultAsync(x => x.cd_appointment_return == id);
         }
 
@@ -48,7 +56,11 @@ namespace apihealthcareconnect.Repositories
             return await _context.AppointmentsReturn
                 .Include(i => i.doctorData).ThenInclude(i => i.Users)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
-                 .Where(x => x.dt_return >= date.Date && x.dt_return < date.Date.AddDays(1))
+                .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Users)
+                .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.appointment).ThenInclude(i => i.exams)
+                .Include(i => i.appointment).ThenInclude(i => i.prescriptions)
+                .Where(x => x.dt_return >= date.Date && x.dt_return < date.Date.AddDays(1))
                 .Where(x => x.cd_doctor == doctorId)
                 .ToListAsync();
 
@@ -62,6 +74,10 @@ namespace apihealthcareconnect.Repositories
             return await _context.AppointmentsReturn
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Users)
+                .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.appointment).ThenInclude(i => i.exams)
+                .Include(i => i.appointment).ThenInclude(i => i.prescriptions)
                 .FirstOrDefaultAsync(u => u.cd_appointment_return == createdAppointmentReturn.Entity.cd_appointment_return);
         }
 
@@ -73,6 +89,10 @@ namespace apihealthcareconnect.Repositories
             return await _context.AppointmentsReturn
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Users)
+                .Include(i => i.appointment).ThenInclude(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.appointment).ThenInclude(i => i.exams)
+                .Include(i => i.appointment).ThenInclude(i => i.prescriptions)
                 .FirstOrDefaultAsync(u => u.cd_appointment_return == updatedAppointmentReturn.Entity.cd_appointment_return);
         }
     }

@@ -1,6 +1,5 @@
 ﻿using apihealthcareconnect.Models;
 using apihealthcareconnect.Services;
-using apihealthcareconnect.ViewModel;
 using apihealthcareconnect.ViewModel.Reponses.Appointments;
 
 namespace apihealthcareconnect.ResponseMappings
@@ -28,6 +27,7 @@ namespace apihealthcareconnect.ResponseMappings
                         appointment.doctorData.cd_user!.Value,
                         appointment.doctorData.Users.nm_user,
                         appointment.doctorData.cd_crm,
+                        appointment.doctorData.Users.ds_gender,
                         new AppointmentsSpecialtyTypeResponseViewModel(
                             appointment.doctorData.specialtyType.cd_specialty_type!.Value,
                             appointment.doctorData.specialtyType.ds_specialty_type,
@@ -96,6 +96,7 @@ namespace apihealthcareconnect.ResponseMappings
                     appointmentReturn.doctorData.cd_user!.Value,
                     appointmentReturn.doctorData.Users.nm_user,
                     appointmentReturn.doctorData.cd_crm,
+                    appointmentReturn.doctorData.Users.ds_gender,
                     new AppointmentsSpecialtyTypeResponseViewModel(
                         appointmentReturn.doctorData.specialtyType.cd_specialty_type!.Value,
                         appointmentReturn.doctorData.specialtyType.ds_specialty_type,
