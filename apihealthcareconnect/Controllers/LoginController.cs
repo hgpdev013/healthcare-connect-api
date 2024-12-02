@@ -44,6 +44,11 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("E-mail ou senha inválidos");
             }
 
+            if (!userToLogin.is_active)
+            {
+                return Forbid("Usuário desativado");
+            }
+
             if (userToLogin.ds_password == null)
             {
                 return BadRequest("Primeiro acesso. Necessário redefinir sua senha para ter o acesso liberado");

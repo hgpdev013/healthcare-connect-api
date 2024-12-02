@@ -34,13 +34,14 @@ namespace apihealthcareconnect.Repositories
             }
 
             appointmentsListQuery = appointmentsListQuery
-                .Include(i => i.prescriptions)
-                .Include(i => i.exams)
-                .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.pacientData).ThenInclude(i => i.Users)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
-                .Include(i => i.doctorData).ThenInclude(i => i.Users);
+                .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointmentsReturn).ThenInclude(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointmentsReturn).ThenInclude(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.prescriptions)
+                .Include(i => i.exams);
 
             return await appointmentsListQuery.ToListAsync();
         }
@@ -48,13 +49,14 @@ namespace apihealthcareconnect.Repositories
         public async Task<Appointments> GetById(int id)
         {
             return await _context.Appointments
-                .Include(i => i.prescriptions)
-                .Include(i => i.exams)
-                .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.pacientData).ThenInclude(i => i.Users)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointmentsReturn).ThenInclude(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointmentsReturn).ThenInclude(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.prescriptions)
+                .Include(i => i.exams)
                 .FirstOrDefaultAsync(x => x.cd_appointment == id);
         }
 
@@ -76,13 +78,14 @@ namespace apihealthcareconnect.Repositories
             await _context.SaveChangesAsync();
 
             return await _context.Appointments
-                .Include(i => i.prescriptions)
-                .Include(i => i.exams)
-                .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.pacientData).ThenInclude(i => i.Users)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointmentsReturn).ThenInclude(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointmentsReturn).ThenInclude(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.prescriptions)
+                .Include(i => i.exams)
                 .FirstOrDefaultAsync(u => u.cd_appointment == createdAppointment.Entity.cd_appointment);
         }
 
@@ -93,13 +96,14 @@ namespace apihealthcareconnect.Repositories
             await _context.SaveChangesAsync();
 
             return await _context.Appointments
-                .Include(i => i.prescriptions)
-                .Include(i => i.exams)
-                .Include(i => i.appointmentsReturn)
                 .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
                 .Include(i => i.pacientData).ThenInclude(i => i.Users)
                 .Include(i => i.doctorData).ThenInclude(i => i.specialtyType)
                 .Include(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointmentsReturn).ThenInclude(i => i.doctorData).ThenInclude(i => i.Users)
+                .Include(i => i.appointmentsReturn).ThenInclude(i => i.doctorData).ThenInclude(i => i.specialtyType)
+                .Include(i => i.prescriptions)
+                .Include(i => i.exams)
                 .FirstOrDefaultAsync(u => u.cd_appointment == updatedAppointment.Entity.cd_appointment);
         }
     }

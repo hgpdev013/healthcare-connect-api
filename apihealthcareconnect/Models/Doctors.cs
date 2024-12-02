@@ -24,6 +24,9 @@ namespace apihealthcareconnect.Models
         [ForeignKey("cd_user")]
         public Users Users { get; set; }
 
+        [JsonIgnore]
+        public List<AppointmentsReturn> AppointmentsReturn { get; set; } = new List<AppointmentsReturn>();
+
         public Doctors(string? cd_crm, int? cd_user, int? cd_specialty_type, string? ds_observation)
         {
             this.cd_crm = cd_crm;
