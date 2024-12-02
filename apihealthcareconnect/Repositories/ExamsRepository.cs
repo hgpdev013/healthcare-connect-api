@@ -14,9 +14,20 @@ namespace apihealthcareconnect.Repositories
             _context = context;
         }
 
-        public async Task<List<Exams>> GetAll()
+        public async Task<List<Exams>> GetAll(int? pacientId)
         {
-            return await _context.Exams.OrderBy(s => s.nm_exam_file).ToListAsync();
+            var examsListQuery = _context.Exams.AsQueryable();
+
+            if (pacientId.HasValue)
+            {
+                examsListQuery = examsListQuery.Where(a => a.cd_pacient == pacientId);
+            }
+
+            examsListQuery = examsListQuery
+                .Include(i => i.pacientData).ThenInclude(i => i.Allergies)
+                .Include(i => i.pacientData).ThenInclude(i => i.Users);
+
+            return await examsListQuery.ToListAsync();
         }
 
         public async Task<Exams> GetById(int id)

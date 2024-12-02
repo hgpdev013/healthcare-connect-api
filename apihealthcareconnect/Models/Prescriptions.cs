@@ -19,7 +19,7 @@ namespace apihealthcareconnect.Models
         public byte[] prescription {  get; set; }
 
         [JsonIgnore]
-        public int cd_appointment {  get; set; }
+        public int? cd_appointment {  get; set; }
 
         [JsonIgnore]
         public int cd_pacient { get; set; }
@@ -37,7 +37,7 @@ namespace apihealthcareconnect.Models
             string nm_prescription_file,
             string nm_prescription_extension,
             byte[] prescription,
-            int cd_appointment,
+            int? cd_appointment,
             int cd_pacient)
         {
             this.cd_prescription = cd_prescription;

@@ -4,7 +4,7 @@ namespace apihealthcareconnect.Interfaces
 {
     public interface IExamsRepository
     {
-        Task<List<Exams>> GetAll();
+        Task<List<Exams>> GetAll(int? userId);
 
         Task<Exams> GetById(int id);
 
