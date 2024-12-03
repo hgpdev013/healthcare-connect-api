@@ -4,7 +4,7 @@ namespace apihealthcareconnect.Interfaces
 {
     public interface IAppointmentsRepository
     {
-        Task<List<Appointments>> GetAll(int? pacientId, int? doctorId, DateTime? date);
+        Task<List<Appointments>> GetAll(int? pacientId, int? doctorId, DateTime? date, bool onlyActiveAppointment);
 
         Task<Appointments> GetById(int id);
 

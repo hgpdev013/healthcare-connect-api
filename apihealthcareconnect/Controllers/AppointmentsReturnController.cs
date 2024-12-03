@@ -43,7 +43,7 @@ namespace apihealthcareconnect.Controllers
                 return NotFound("A consulta para ver os retornos não existe");
             }
 
-            var appointmentsReturnByAppointment = await _appointmentsReturnRepository.GetAll(appointmentId, date, null);
+            var appointmentsReturnByAppointment = await _appointmentsReturnRepository.GetAll(appointmentId, date, null, false);
 
             var appointmentsReturnFormatted = appointmentsReturnByAppointment.Select(x => _appointmentResponseMapping.mapAppointmentReturn(x)).ToList();
 
@@ -94,8 +94,8 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("Usuário não é médico");
             }
 
-            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, doctorScheduled.doctorData.cd_doctor, AppointmentReturnParams.date);
-            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentReturnParams.date, doctorScheduled.doctorData.cd_doctor);
+            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, doctorScheduled.doctorData.cd_doctor, AppointmentReturnParams.date, true);
+            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentReturnParams.date, doctorScheduled.doctorData.cd_doctor, true);
 
             if (appointmentsOnSameDate.Count > 0 || returnsOnSameDate.Count > 0)
             {
@@ -150,8 +150,8 @@ namespace apihealthcareconnect.Controllers
                 return Forbid("A data da consulta não pode ser alterada após a data antiga ter passado.");
             }
 
-            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, appointmentReturnToBeEdited.cd_doctor, AppointmentParams.date);
-            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date, appointmentReturnToBeEdited.cd_doctor);
+            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, appointmentReturnToBeEdited.cd_doctor, AppointmentParams.date, true);
+            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date, appointmentReturnToBeEdited.cd_doctor, true);
 
             var sameReturn = returnsOnSameDate.Find(a => a.cd_appointment_return == AppointmentParams.id);
 

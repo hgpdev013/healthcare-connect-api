@@ -57,7 +57,8 @@ namespace apihealthcareconnect.Controllers
             var appointments = await _appointmentsRepository.GetAll(
                 pacientByUserId?.pacientData?.cd_pacient,
                 doctorByUserId?.doctorData?.cd_doctor,
-                null
+                null,
+                false
             );
 
             var response = appointments
@@ -163,8 +164,8 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("Usuário não é paciente");
             }
 
-            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, doctorScheduled.doctorData.cd_doctor, AppointmentParams.date);
-            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date, doctorScheduled.doctorData.cd_doctor);
+            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, doctorScheduled.doctorData.cd_doctor, AppointmentParams.date, true);
+            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date, doctorScheduled.doctorData.cd_doctor, true);
 
             if (appointmentsOnSameDate.Count > 0 || returnsOnSameDate.Count > 0)
             {
@@ -218,8 +219,8 @@ namespace apihealthcareconnect.Controllers
                 return Forbid("A data da consulta não pode ser alterada após a data antiga ter passado.");
             }
 
-            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, appointmentToBeEdited.cd_doctor, AppointmentParams.date);
-            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date, appointmentToBeEdited.cd_doctor);
+            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, appointmentToBeEdited.cd_doctor, AppointmentParams.date, true);
+            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date, appointmentToBeEdited.cd_doctor, true);
             var sameAppointment = appointmentsOnSameDate.Find(a => a.cd_appointment == AppointmentParams.id);
 
             if (sameAppointment == null)
