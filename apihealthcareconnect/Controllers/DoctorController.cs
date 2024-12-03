@@ -31,7 +31,7 @@ namespace apihealthcareconnect.Controllers
         {
             var doctors = await _usersRepository.GetByUserTypeId(1);
 
-            var doctorsFormatted = doctors.Select(d => _userResponseMapping.MapGenericUser(true, d)).ToList();
+            var doctorsFormatted = doctors.Select(d => _userResponseMapping.MapGenericUser(false, d)).ToList();
 
             return Ok(doctorsFormatted);
         }
