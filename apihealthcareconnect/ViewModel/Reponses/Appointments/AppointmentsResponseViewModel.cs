@@ -20,7 +20,7 @@
 
         public List<Exams.ExamWithoutByteResponseViewModel>? exams { get; set; } = new List<Exams.ExamWithoutByteResponseViewModel>();
 
-        public List<Prescriptions.PrescriptionWithoutByteResponseViewModel> prescriptions = new List<Prescriptions.PrescriptionWithoutByteResponseViewModel>();
+        public List<Prescriptions.PrescriptionWithoutByteResponseViewModel> prescriptions { get; set; } = new List<Prescriptions.PrescriptionWithoutByteResponseViewModel>();
 
         public AppointmentsResponseViewModel(int id,
             DateTime appointmentDate,
