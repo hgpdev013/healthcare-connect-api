@@ -253,7 +253,7 @@ namespace apihealthcareconnect.Controllers
 
                     if (prescriptionToDelete == null)
                     {
-                        return NotFound("Exame não existe");
+                        return NotFound("Prescrição não existe");
                     }
 
                     await _prescriptionsRepository.Delete(prescriptionToDelete);
