@@ -163,8 +163,8 @@ namespace apihealthcareconnect.Controllers
                 return BadRequest("Usuário não é paciente");
             }
 
-            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, null, AppointmentParams.date);
-            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date);
+            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, doctorScheduled.doctorData.cd_doctor, AppointmentParams.date);
+            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date, doctorScheduled.doctorData.cd_doctor);
 
             if (appointmentsOnSameDate.Count > 0 || returnsOnSameDate.Count > 0)
             {
@@ -218,8 +218,8 @@ namespace apihealthcareconnect.Controllers
                 return Forbid("A data da consulta não pode ser alterada após a data antiga ter passado.");
             }
 
-            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, null, AppointmentParams.date);
-            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date);
+            var appointmentsOnSameDate = await _appointmentsRepository.GetAll(null, appointmentToBeEdited.cd_doctor, AppointmentParams.date);
+            var returnsOnSameDate = await _appointmentsReturnRepository.GetAll(null, AppointmentParams.date, appointmentToBeEdited.cd_doctor);
             var sameAppointment = appointmentsOnSameDate.Find(a => a.cd_appointment == AppointmentParams.id);
 
             if (sameAppointment == null)

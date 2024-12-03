@@ -14,7 +14,7 @@ namespace apihealthcareconnect.Repositories
             _context = context;
         }
 
-        public async Task<List<AppointmentsReturn>> GetAll(int? appointmentId, DateTime? date)
+        public async Task<List<AppointmentsReturn>> GetAll(int? appointmentId, DateTime? date, int? doctorId)
         {
             var appointmentsListQuery = _context.AppointmentsReturn.AsQueryable();
 
@@ -26,6 +26,11 @@ namespace apihealthcareconnect.Repositories
             if (date.HasValue)
             {
                 appointmentsListQuery = appointmentsListQuery.Where(a => a.dt_return == date);
+            }
+
+            if (doctorId.HasValue)
+            {
+                appointmentsListQuery = appointmentsListQuery.Where(a => a.cd_doctor == doctorId);
             }
 
             appointmentsListQuery = appointmentsListQuery
