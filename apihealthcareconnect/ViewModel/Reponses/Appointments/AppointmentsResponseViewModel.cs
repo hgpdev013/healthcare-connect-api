@@ -20,7 +20,7 @@
 
         public List<Exams.ExamWithoutByteResponseViewModel>? exams { get; set; } = new List<Exams.ExamWithoutByteResponseViewModel>();
 
-        public List<Prescriptions.PrescriptionWithoutByteResponseViewModel>? prescriptions = new List<Prescriptions.PrescriptionWithoutByteResponseViewModel>();
+        public List<Prescriptions.PrescriptionWithoutByteResponseViewModel> prescriptions = new List<Prescriptions.PrescriptionWithoutByteResponseViewModel>();
 
         public AppointmentsResponseViewModel(int id,
             DateTime appointmentDate,
@@ -41,9 +41,9 @@
             this.status = status;
             this.doctorData = doctorData;
             this.pacientData = pacientData;
+            this.appointmentsReturn = appointmentsReturn;
             this.exams = exams;
             this.prescriptions = prescriptions;
-            this.appointmentsReturn = appointmentsReturn;
         }
     }
 }

@@ -67,6 +67,7 @@ namespace apihealthcareconnect.Repositories
                 .Include(i => i.appointment).ThenInclude(i => i.prescriptions)
                 .Where(x => x.dt_return >= date.Date && x.dt_return < date.Date.AddDays(1))
                 .Where(x => x.cd_doctor == doctorId)
+                .Where(x => x.is_active)
                 .ToListAsync();
 
         }

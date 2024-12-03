@@ -1,5 +1,4 @@
 ﻿using apihealthcareconnect.Models;
-using apihealthcareconnect.ViewModel.Reponses.Exams;
 using apihealthcareconnect.ViewModel.Reponses.Prescriptions;
 
 namespace apihealthcareconnect.ResponseMappings
