@@ -88,7 +88,7 @@ namespace apihealthcareconnect.Repositories
 
         public async Task<AppointmentsReturn> Update(AppointmentsReturn appointmentsReturn)
         {
-            var updatedAppointmentReturn = await _context.AddAsync(appointmentsReturn);
+            var updatedAppointmentReturn = _context.Update(appointmentsReturn);
             await _context.SaveChangesAsync();
 
             return await _context.AppointmentsReturn
